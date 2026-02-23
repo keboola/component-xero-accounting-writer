@@ -202,10 +202,10 @@ class Component(ComponentBase):
         """Return available Xero tenants for the dropdown in root config."""
         self._init_client()
         try:
-            tenant_ids = self.client.get_available_tenant_ids()
+            tenants = self.client.get_available_tenants()
         except XeroException as exc:
             raise UserException(f"Failed to list tenants: {exc}") from exc
-        return [SelectElement(t, t) for t in tenant_ids]
+        return [SelectElement(value=t["id"], label=f"{t['name']} ({t['id']})") for t in tenants]
 
 
 if __name__ == "__main__":

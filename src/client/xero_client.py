@@ -37,6 +37,7 @@ class XeroClient:
             oauth2_token_saver=self._set_xero_oauth2_token_dict,
         )
         self._available_tenant_ids: Optional[List[str]] = None
+        self._available_tenants: Optional[List[Dict]] = None
 
     def get_xero_oauth2_token_dict(self) -> Dict:
         return self._oauth_token_dict
@@ -62,20 +63,27 @@ class XeroClient:
 
     def get_available_tenant_ids(self) -> List[str]:
         if not self._available_tenant_ids:
-            self._refresh_available_tenant_ids()
+            self._refresh_available_tenants()
         return self._available_tenant_ids  # type: ignore[return-value]
 
-    def _refresh_available_tenant_ids(self) -> None:
+    def get_available_tenants(self) -> List[Dict]:
+        """Return list of dicts with 'id' and 'name' for each available tenant."""
+        if not self._available_tenants:
+            self._refresh_available_tenants()
+        return self._available_tenants  # type: ignore[return-value]
+
+    def _refresh_available_tenants(self) -> None:
         identity_api = IdentityApi(self._api_client)
-        available_tenants: List[str] = []
+        tenants: List[Dict] = []
         try:
             for connection in identity_api.get_connections():
-                tenant = serialize(connection)
-                available_tenants.append(tenant.get("tenantId"))
+                t = serialize(connection)
+                tenants.append({"id": t.get("tenantId"), "name": t.get("tenantName")})
         except (OAuth2InvalidGrantError, HTTPStatusException) as oauth_err:
             raise XeroException(oauth_err) from oauth_err
-        self._available_tenant_ids = available_tenants
-        logging.info(f"Available tenant IDs: {self._available_tenant_ids}")
+        self._available_tenants = tenants
+        self._available_tenant_ids = [t["id"] for t in tenants]
+        logging.info(f"Available tenants: {self._available_tenants}")
 
     @sleep_and_retry
     @limits(calls=CALLS_PER_MINUTE, period=ONE_MINUTE)

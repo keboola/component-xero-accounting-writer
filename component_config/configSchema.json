@@ -3,10 +3,18 @@
   "title": "Xero Accounting Writer",
   "properties": {
     "tenant_id": {
-      "title": "Tenant ID",
-      "description": "Xero organisation ID. Leave blank to use the first available tenant.",
       "type": "string",
-      "propertyOrder": 10
+      "title": "Tenant ID",
+      "format":"select",
+      "enum":[],
+      "description": "Xero organisation ID. Leave blank to use the first available tenant.",
+      "propertyOrder": 10,
+      "options": {
+          "async": {
+            "label": "Re-load tenants",
+            "action": "listTenants"
+          }
+      }
     },
     "entities": {
       "title": "Entities to Write",
@@ -14,8 +22,12 @@
       "propertyOrder": 20,
       "items": {
         "type": "object",
-        "required": ["entity_type", "write_mode", "source_table"],
-        "properties": {
+        "required": [
+          "entity_type",
+          "write_mode",
+          "source_table"
+        ],
+        "title":"Entity",
           "entity_type": {
             "title": "Entity Type",
             "type": "string",
