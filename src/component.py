@@ -8,7 +8,7 @@ from keboola.component.exceptions import UserException
 from keboola.component.sync_actions import SelectElement
 
 from client import XeroClient, XeroException
-from configuration import EntityType, RootConfiguration, RowConfiguration
+from configuration import EntityType, RootConfiguration
 from writers import (
     BankTransactionsWriter,
     BaseWriter,
@@ -51,20 +51,26 @@ class Component(ComponentBase):
     def run(self) -> None:
         self._init_client()
 
-        row_config = RowConfiguration(**self.configuration.parameters)
-        entity_type = row_config.entity_type
-        write_mode = row_config.write_mode.value
-        tenant_id = self._resolve_tenant_id()
+        root_config = RootConfiguration(**self.configuration.parameters)
+        tenant_id = self._resolve_tenant_id(root_config.tenant_id)
 
-        input_tables = self.get_input_tables_definitions()
-        if not input_tables:
-            raise UserException("No input table configured. Please add an input table mapping in the configuration.")
+        if not root_config.entities:
+            raise UserException("No entities configured. Add at least one entity in the 'Entities to Write' list.")
 
-        rows = self._read_csv(input_tables[0].full_path)
-        logging.info(f"Loaded {len(rows)} row(s) from input table")
+        input_tables = {t.name: t for t in self.get_input_tables_definitions()}
 
-        writer = self._build_writer(entity_type, write_mode, tenant_id)
-        writer.write(rows)
+        for entity_cfg in root_config.entities:
+            table_def = input_tables.get(entity_cfg.source_table)
+            if table_def is None:
+                raise UserException(
+                    f"Input table '{entity_cfg.source_table}' not found for entity "
+                    f"'{entity_cfg.entity_type.value}'. Check storage mapping."
+                )
+            rows = self._read_csv(table_def.full_path)
+            logging.info(f"[{entity_cfg.entity_type.value}] Loaded {len(rows)} row(s) from '{entity_cfg.source_table}'")
+
+            writer = self._build_writer(entity_cfg.entity_type, entity_cfg.write_mode.value, tenant_id)
+            writer.write(rows)
 
         self._refresh_token_and_save_state()
 
@@ -143,9 +149,7 @@ class Component(ComponentBase):
     # Tenant resolution                                                     #
     # ------------------------------------------------------------------ #
 
-    def _resolve_tenant_id(self) -> str:
-        root_config = RootConfiguration(**self.configuration.parameters)
-        explicit_tenant = root_config.tenant_id
+    def _resolve_tenant_id(self, explicit_tenant: str = None) -> str:
         if explicit_tenant:
             return explicit_tenant
 

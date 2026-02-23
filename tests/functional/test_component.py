@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, patch
 # Ensure src/ is on the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../src"))
 
-from configuration import EntityType, RootConfiguration, RowConfiguration, WriteMode
+from configuration import EntityConfiguration, EntityType, RootConfiguration, WriteMode
 from writers.base_writer import _is_empty, _to_bool, _to_float, _to_int
 
 
@@ -68,17 +68,18 @@ class TestBaseWriterHelpers(unittest.TestCase):
 class TestConfiguration(unittest.TestCase):
     """Unit tests for configuration models."""
 
-    def test_row_config_defaults(self):
-        config = RowConfiguration(entity_type="Contacts")
+    def test_entity_config_defaults(self):
+        config = EntityConfiguration(entity_type="Contacts", source_table="contacts")
         self.assertEqual(config.entity_type, EntityType.contacts)
         self.assertEqual(config.write_mode, WriteMode.upsert)
+        self.assertEqual(config.source_table, "contacts")
 
-    def test_row_config_create_mode(self):
-        config = RowConfiguration(entity_type="Invoices", write_mode="create")
+    def test_entity_config_create_mode(self):
+        config = EntityConfiguration(entity_type="Invoices", write_mode="create", source_table="invoices")
         self.assertEqual(config.entity_type, EntityType.invoices)
         self.assertEqual(config.write_mode, WriteMode.create)
 
-    def test_row_config_all_entity_types(self):
+    def test_entity_config_all_entity_types(self):
         entity_types = [
             "Contacts",
             "Invoices",
@@ -94,7 +95,7 @@ class TestConfiguration(unittest.TestCase):
             "BankTransactions",
         ]
         for et in entity_types:
-            config = RowConfiguration(entity_type=et)
+            config = EntityConfiguration(entity_type=et, source_table=et.lower())
             self.assertIsNotNone(config.entity_type, f"Failed for entity_type={et}")
 
     def test_root_config_optional_tenant(self):
@@ -104,6 +105,23 @@ class TestConfiguration(unittest.TestCase):
     def test_root_config_with_tenant(self):
         config = RootConfiguration(tenant_id="abc-123")
         self.assertEqual(config.tenant_id, "abc-123")
+
+    def test_root_config_entities_list(self):
+        config = RootConfiguration(
+            entities=[
+                {"entity_type": "Contacts", "write_mode": "upsert", "source_table": "contacts"},
+                {"entity_type": "Invoices", "write_mode": "create", "source_table": "invoices"},
+            ]
+        )
+        self.assertEqual(len(config.entities), 2)
+        self.assertEqual(config.entities[0].entity_type, EntityType.contacts)
+        self.assertEqual(config.entities[0].source_table, "contacts")
+        self.assertEqual(config.entities[1].entity_type, EntityType.invoices)
+        self.assertEqual(config.entities[1].write_mode, WriteMode.create)
+
+    def test_root_config_empty_entities(self):
+        config = RootConfiguration()
+        self.assertEqual(config.entities, [])
 
 
 class TestContactsWriter(unittest.TestCase):

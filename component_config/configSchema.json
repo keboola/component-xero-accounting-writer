@@ -4,9 +4,72 @@
   "properties": {
     "tenant_id": {
       "title": "Tenant ID",
-      "description": "Xero organisation (tenant) ID to write data to. Leave blank to use the first available tenant.",
+      "description": "Xero organisation ID. Leave blank to use the first available tenant.",
       "type": "string",
       "propertyOrder": 10
+    },
+    "entities": {
+      "title": "Entities to Write",
+      "type": "array",
+      "propertyOrder": 20,
+      "items": {
+        "type": "object",
+        "required": ["entity_type", "write_mode", "source_table"],
+        "properties": {
+          "entity_type": {
+            "title": "Entity Type",
+            "type": "string",
+            "enum": [
+              "Contacts",
+              "Invoices",
+              "Payments",
+              "PurchaseOrders",
+              "ManualJournals",
+              "Items",
+              "CreditNotes",
+              "Currencies",
+              "Employees",
+              "Quotes",
+              "TrackingCategories",
+              "BankTransactions"
+            ],
+            "options": {
+              "enum_titles": [
+                "Contacts",
+                "Invoices",
+                "Payments",
+                "Purchase Orders",
+                "Manual Journals",
+                "Items",
+                "Credit Notes",
+                "Currencies",
+                "Employees",
+                "Quotes",
+                "Tracking Categories",
+                "Bank Transactions"
+              ]
+            },
+            "propertyOrder": 10
+          },
+          "write_mode": {
+            "title": "Write Mode",
+            "description": "Create: add new records only. Upsert: create or update by Xero ID or reference.",
+            "type": "string",
+            "enum": ["create", "upsert"],
+            "options": {
+              "enum_titles": ["Create (POST)", "Upsert (POST + PUT)"]
+            },
+            "default": "upsert",
+            "propertyOrder": 20
+          },
+          "source_table": {
+            "title": "Input Table Name",
+            "description": "The destination name of the input table as configured in storage mapping.",
+            "type": "string",
+            "propertyOrder": 30
+          }
+        }
+      }
     }
   }
 }

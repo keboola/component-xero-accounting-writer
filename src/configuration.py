@@ -25,10 +25,26 @@ class EntityType(str, Enum):
     bank_transactions = "BankTransactions"
 
 
+class EntityConfiguration(BaseModel):
+    """Configuration for a single entity to write."""
+
+    entity_type: EntityType
+    write_mode: WriteMode = WriteMode.upsert
+    source_table: str
+
+    def __init__(self, **data):
+        try:
+            super().__init__(**data)
+        except ValidationError as e:
+            error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
+            raise UserException(f"Entity configuration validation error: {', '.join(error_messages)}") from e
+
+
 class RootConfiguration(BaseModel):
-    """Root-level configuration (shared across all rows)."""
+    """Root-level configuration."""
 
     tenant_id: Optional[str] = Field(default=None)
+    entities: list[EntityConfiguration] = Field(default_factory=list)
 
     def __init__(self, **data):
         try:
@@ -36,17 +52,3 @@ class RootConfiguration(BaseModel):
         except ValidationError as e:
             error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
             raise UserException(f"Configuration validation error: {', '.join(error_messages)}") from e
-
-
-class RowConfiguration(BaseModel):
-    """Per-row configuration (one entity type to write)."""
-
-    entity_type: EntityType
-    write_mode: WriteMode = WriteMode.upsert
-
-    def __init__(self, **data):
-        try:
-            super().__init__(**data)
-        except ValidationError as e:
-            error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
-            raise UserException(f"Row configuration validation error: {', '.join(error_messages)}") from e
