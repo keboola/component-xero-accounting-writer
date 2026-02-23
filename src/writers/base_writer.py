@@ -66,7 +66,7 @@ class BaseWriter(ABC):
         """Process rows in batches of BATCH_SIZE."""
         total = len(rows)
         for i in range(0, total, BATCH_SIZE):
-            batch = rows[i: i + BATCH_SIZE]
+            batch = rows[i : i + BATCH_SIZE]
             end = min(i + BATCH_SIZE, total)
             logging.info(f"Processing batch {i // BATCH_SIZE + 1}: records {i + 1}-{end} of {total}")
             batch_fn(batch)

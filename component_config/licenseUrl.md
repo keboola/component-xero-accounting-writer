@@ -1,0 +1,1 @@
+https://github.com/keboola/component-xero-accounting-writer/blob/master/LICENSE.md
