@@ -15,7 +15,6 @@ RUN uv sync --all-groups --frozen
 COPY src/ src
 COPY tests/ tests
 COPY scripts/ scripts
-COPY flake8.cfg .
 COPY deploy.sh .
 
 CMD ["python", "-u", "src/component.py"]

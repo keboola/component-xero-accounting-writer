@@ -4,6 +4,7 @@ Functional tests for the Xero Accounting Writer component.
 These tests validate the component's configuration parsing, writer routing,
 and CSV-to-model mapping logic WITHOUT making real Xero API calls.
 """
+
 import os
 import sys
 import unittest
@@ -79,9 +80,18 @@ class TestConfiguration(unittest.TestCase):
 
     def test_row_config_all_entity_types(self):
         entity_types = [
-            "Contacts", "Invoices", "Payments", "PurchaseOrders",
-            "ManualJournals", "Items", "CreditNotes", "Currencies",
-            "Employees", "Quotes", "TrackingCategories", "BankTransactions",
+            "Contacts",
+            "Invoices",
+            "Payments",
+            "PurchaseOrders",
+            "ManualJournals",
+            "Items",
+            "CreditNotes",
+            "Currencies",
+            "Employees",
+            "Quotes",
+            "TrackingCategories",
+            "BankTransactions",
         ]
         for et in entity_types:
             config = RowConfiguration(entity_type=et)
@@ -101,6 +111,7 @@ class TestContactsWriter(unittest.TestCase):
 
     def setUp(self):
         from writers.contacts import ContactsWriter
+
         mock_api_client = MagicMock()
         with patch("writers.base_writer.AccountingApi"):
             self.writer = ContactsWriter(mock_api_client, "tenant-123", "upsert")
@@ -148,6 +159,7 @@ class TestInvoicesWriter(unittest.TestCase):
 
     def setUp(self):
         from writers.invoices import InvoicesWriter
+
         mock_api_client = MagicMock()
         with patch("writers.base_writer.AccountingApi"):
             self.writer = InvoicesWriter(mock_api_client, "tenant-123", "upsert")
@@ -178,6 +190,7 @@ class TestWriterRouting(unittest.TestCase):
 
     def test_writer_map_completeness(self):
         from component import WRITER_MAP
+
         for entity in EntityType:
             self.assertIn(entity, WRITER_MAP, f"Missing writer for {entity}")
 

@@ -58,9 +58,7 @@ class Component(ComponentBase):
 
         input_tables = self.get_input_tables_definitions()
         if not input_tables:
-            raise UserException(
-                "No input table configured. Please add an input table mapping in the configuration."
-            )
+            raise UserException("No input table configured. Please add an input table mapping in the configuration.")
 
         rows = self._read_csv(input_tables[0].full_path)
         logging.info(f"Loaded {len(rows)} row(s) from input table")
@@ -115,9 +113,7 @@ class Component(ComponentBase):
         try:
             self.client.force_refresh_token()
         except XeroException as exc:
-            raise UserException(
-                "Failed to refresh the Xero token. Please reauthorize the component."
-            ) from exc
+            raise UserException("Failed to refresh the Xero token. Please reauthorize the component.") from exc
         new_state = self.get_state_file()
         new_state[KEY_STATE_OAUTH_TOKEN_DICT] = json.dumps(self.client.get_xero_oauth2_token_dict())
         self.write_state_file(new_state)
@@ -160,8 +156,7 @@ class Component(ComponentBase):
 
         if not available:
             raise UserException(
-                "No Xero tenants accessible with the current credentials. "
-                "Please check your authorization."
+                "No Xero tenants accessible with the current credentials. Please check your authorization."
             )
         if len(available) > 1:
             logging.warning(

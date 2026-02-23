@@ -58,9 +58,7 @@ class XeroClient:
             logging.info("Refreshing OAuth2 token")
             self._api_client.refresh_oauth2_token()
         except (HTTPStatusException, ProtocolError) as error:
-            raise XeroException(
-                "Failed to authenticate the client, please reauthorize the component"
-            ) from error
+            raise XeroException("Failed to authenticate the client, please reauthorize the component") from error
 
     def get_available_tenant_ids(self) -> List[str]:
         if not self._available_tenant_ids:
