@@ -1,0 +1,16 @@
+{
+  "parameters": {
+    "entity_type": "Contacts",
+    "write_mode": "upsert"
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-crm.contacts",
+          "destination": "contacts.csv"
+        }
+      ]
+    }
+  }
+}

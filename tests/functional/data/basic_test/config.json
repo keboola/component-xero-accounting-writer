@@ -1,0 +1,17 @@
+{
+  "parameters": {
+    "entity_type": "Contacts",
+    "write_mode": "upsert"
+  },
+  "image_parameters": {},
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-test.contacts",
+          "destination": "contacts.csv"
+        }
+      ]
+    }
+  }
+}

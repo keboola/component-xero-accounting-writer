@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "title": "Xero Accounting Writer",
+  "properties": {
+    "tenant_id": {
+      "title": "Tenant ID",
+      "description": "Xero organisation (tenant) ID to write data to. Leave blank to use the first available tenant.",
+      "type": "string",
+      "propertyOrder": 10
+    }
+  }
+}
