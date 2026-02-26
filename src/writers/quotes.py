@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Contact, LineItem, Quote, Quotes
+from xero_python.accounting.models import Contact, CurrencyCode, LineItem, Quote, QuoteStatusCodes, Quotes
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_float
@@ -56,9 +56,9 @@ class QuotesWriter(BaseWriter):
         if v := self._get(row, "Reference"):
             quote.reference = v
         if v := self._get(row, "CurrencyCode"):
-            quote.currency_code = v
+            quote.currency_code = CurrencyCode(v)
         if v := self._get(row, "Status"):
-            quote.status = v
+            quote.status = QuoteStatusCodes(v)
         if v := self._get(row, "Title"):
             quote.title = v
         if v := self._get(row, "Summary"):
@@ -125,8 +125,8 @@ class QuotesWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "quotes") and result.quotes:
-            ok = sum(1 for q in result.quotes if not q.has_validation_errors)
-            errors = [q for q in result.quotes if q.has_validation_errors]
+            ok = sum(1 for q in result.quotes if not q.validation_errors)
+            errors = [q for q in result.quotes if q.validation_errors]
             logging.info(f"Quotes batch: {ok} ok, {len(errors)} with validation errors")
             for q in errors:
                 logging.warning(f"  Quote '{q.quote_number}' validation errors: {q.validation_errors}")

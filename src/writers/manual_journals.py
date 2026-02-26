@@ -46,12 +46,11 @@ class ManualJournalsWriter(BaseWriter):
             raise
 
     def _row_to_journal(self, row: Dict[str, Any]) -> ManualJournal:
-        journal = ManualJournal()
+        narration = self._get(row, "Narration") or ""
+        journal = ManualJournal(narration=narration)
 
         if v := self._get(row, "ManualJournalID"):
             journal.manual_journal_id = v
-        if v := self._get(row, "Narration"):
-            journal.narration = v
         if v := self._get(row, "DateString"):
             journal.date_string = v
         if v := self._get(row, "Status"):
@@ -91,8 +90,8 @@ class ManualJournalsWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "manual_journals") and result.manual_journals:
-            ok = sum(1 for j in result.manual_journals if not j.has_validation_errors)
-            errors = [j for j in result.manual_journals if j.has_validation_errors]
+            ok = sum(1 for j in result.manual_journals if not j.validation_errors)
+            errors = [j for j in result.manual_journals if j.validation_errors]
             logging.info(f"ManualJournals batch: {ok} ok, {len(errors)} with validation errors")
             for j in errors:
                 logging.warning(f"  Journal '{j.narration}' validation errors: {j.validation_errors}")

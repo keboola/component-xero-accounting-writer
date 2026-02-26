@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 from xero_python.accounting.models import Account, Invoice, Payment, Payments
 from xero_python.api_client import ApiClient
 
-from .base_writer import BaseWriter, _is_empty, _to_bool, _to_float
+from .base_writer import BaseWriter, _is_empty, _to_bool, _to_date, _to_float
 
 
 class PaymentsWriter(BaseWriter):
@@ -27,20 +27,13 @@ class PaymentsWriter(BaseWriter):
         payments = [self._row_to_payment(row) for row in batch]
         payments_obj = Payments(payments=payments)
         try:
-            if self.write_mode == "upsert" and any(p.payment_id for p in payments):
-                # Payments API doesn't have update_or_create; update by PaymentID if present
-                for payment in payments:
-                    if payment.payment_id:
-                        self.accounting_api.update_payment(self.tenant_id, payment.payment_id, payment)
-                    else:
-                        self.accounting_api.create_payment(self.tenant_id, payment)
-            else:
-                result = self.accounting_api.create_payments(
-                    self.tenant_id,
-                    payments_obj,
-                    summarize_errors=False,
-                )
-                self._log_result(result)
+            # Xero API does not support updating payments; always create
+            result = self.accounting_api.create_payments(
+                self.tenant_id,
+                payments_obj,
+                summarize_errors=False,
+            )
+            self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write payments batch: {exc}")
             raise
@@ -50,8 +43,8 @@ class PaymentsWriter(BaseWriter):
 
         if v := self._get(row, "PaymentID"):
             payment.payment_id = v
-        if v := self._get(row, "Date"):
-            payment.date = v
+        if d := _to_date(row.get("Date")):
+            payment.date = d
         if v := self._get(row, "Reference"):
             payment.reference = v
         if v := self._get(row, "Status"):
@@ -110,8 +103,8 @@ class PaymentsWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "payments") and result.payments:
-            ok = sum(1 for p in result.payments if not p.has_validation_errors)
-            errors = [p for p in result.payments if p.has_validation_errors]
+            ok = sum(1 for p in result.payments if not p.validation_errors)
+            errors = [p for p in result.payments if p.validation_errors]
             logging.info(f"Payments batch: {ok} ok, {len(errors)} with validation errors")
             for p in errors:
                 logging.warning(f"  Payment '{p.payment_id}' validation errors: {p.validation_errors}")

@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Contact, LineItem, PurchaseOrder, PurchaseOrders
+from xero_python.accounting.models import Contact, CurrencyCode, LineItem, PurchaseOrder, PurchaseOrders
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_float
@@ -61,7 +61,7 @@ class PurchaseOrdersWriter(BaseWriter):
         if v := self._get(row, "Status"):
             po.status = v
         if v := self._get(row, "CurrencyCode"):
-            po.currency_code = v
+            po.currency_code = CurrencyCode(v)
         if v := self._get(row, "Reference"):
             po.reference = v
         if v := self._get(row, "DeliveryAddress"):
@@ -128,8 +128,8 @@ class PurchaseOrdersWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "purchase_orders") and result.purchase_orders:
-            ok = sum(1 for po in result.purchase_orders if not po.has_validation_errors)
-            errors = [po for po in result.purchase_orders if po.has_validation_errors]
+            ok = sum(1 for po in result.purchase_orders if not po.validation_errors)
+            errors = [po for po in result.purchase_orders if po.validation_errors]
             logging.info(f"PurchaseOrders batch: {ok} ok, {len(errors)} with validation errors")
             for po in errors:
                 logging.warning(f"  PO '{po.purchase_order_number}' validation errors: {po.validation_errors}")

@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Address, Contact, Contacts, Phone
+from xero_python.accounting.models import Address, Contact, Contacts, CurrencyCode, Phone
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_bool
@@ -77,7 +77,7 @@ class ContactsWriter(BaseWriter):
         if v := self._get(row, "AccountsPayableTaxType"):
             contact.accounts_payable_tax_type = v
         if v := self._get(row, "DefaultCurrency"):
-            contact.default_currency = v
+            contact.default_currency = CurrencyCode(v)
         if v := self._get(row, "Website"):
             contact.website = v
 
@@ -152,8 +152,8 @@ class ContactsWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "contacts") and result.contacts:
-            ok = sum(1 for c in result.contacts if not c.has_validation_errors)
-            errors = [c for c in result.contacts if c.has_validation_errors]
+            ok = sum(1 for c in result.contacts if not c.validation_errors)
+            errors = [c for c in result.contacts if c.validation_errors]
             logging.info(f"Contacts batch: {ok} ok, {len(errors)} with validation errors")
             for c in errors:
                 logging.warning(f"  Contact '{c.name}' validation errors: {c.validation_errors}")

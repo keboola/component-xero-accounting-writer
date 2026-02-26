@@ -45,12 +45,11 @@ class ItemsWriter(BaseWriter):
             raise
 
     def _row_to_item(self, row: Dict[str, Any]) -> Item:
-        item = Item()
+        code = self._get(row, "Code") or ""
+        item = Item(code=code)
 
         if v := self._get(row, "ItemID"):
             item.item_id = v
-        if v := self._get(row, "Code"):
-            item.code = v
         if v := self._get(row, "Name"):
             item.name = v
         if v := self._get(row, "Description"):
@@ -112,8 +111,8 @@ class ItemsWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "items") and result.items:
-            ok = sum(1 for it in result.items if not it.has_validation_errors)
-            errors = [it for it in result.items if it.has_validation_errors]
+            ok = sum(1 for it in result.items if not it.validation_errors)
+            errors = [it for it in result.items if it.validation_errors]
             logging.info(f"Items batch: {ok} ok, {len(errors)} with validation errors")
             for it in errors:
                 logging.warning(f"  Item '{it.code}' validation errors: {it.validation_errors}")

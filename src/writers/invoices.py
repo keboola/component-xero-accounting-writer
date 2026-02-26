@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Contact, Invoice, Invoices, LineItem
+from xero_python.accounting.models import Contact, CurrencyCode, Invoice, Invoices, LineItem
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_float
@@ -62,7 +62,7 @@ class InvoicesWriter(BaseWriter):
         if v := self._get(row, "Reference"):
             invoice.reference = v
         if v := self._get(row, "CurrencyCode"):
-            invoice.currency_code = v
+            invoice.currency_code = CurrencyCode(v)
         if v := self._get(row, "Url"):
             invoice.url = v
         if v := self._get(row, "DateString"):
@@ -134,8 +134,8 @@ class InvoicesWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "invoices") and result.invoices:
-            ok = sum(1 for inv in result.invoices if not inv.has_validation_errors)
-            errors = [inv for inv in result.invoices if inv.has_validation_errors]
+            ok = sum(1 for inv in result.invoices if not inv.validation_errors)
+            errors = [inv for inv in result.invoices if inv.validation_errors]
             logging.info(f"Invoices batch: {ok} ok, {len(errors)} with validation errors")
             for inv in errors:
                 logging.warning(f"  Invoice '{inv.invoice_number}' validation errors: {inv.validation_errors}")

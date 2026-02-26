@@ -27,7 +27,7 @@ class EmployeesWriter(BaseWriter):
         employees_obj = Employees(employees=employees)
         try:
             if self.write_mode == "upsert":
-                result = self.accounting_api.update_employees(
+                result = self.accounting_api.update_or_create_employees(
                     self.tenant_id,
                     employees_obj,
                 )

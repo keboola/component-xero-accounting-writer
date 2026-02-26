@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Contact, CreditNote, CreditNotes, LineItem
+from xero_python.accounting.models import Contact, CreditNote, CreditNotes, CurrencyCode, LineItem
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_float
@@ -60,7 +60,7 @@ class CreditNotesWriter(BaseWriter):
         if v := self._get(row, "Reference"):
             note.reference = v
         if v := self._get(row, "CurrencyCode"):
-            note.currency_code = v
+            note.currency_code = CurrencyCode(v)
         if v := self._get(row, "DateString"):
             note.date_string = v
         if v := self._get(row, "BrandingThemeID"):
@@ -121,8 +121,8 @@ class CreditNotesWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "credit_notes") and result.credit_notes:
-            ok = sum(1 for cn in result.credit_notes if not cn.has_validation_errors)
-            errors = [cn for cn in result.credit_notes if cn.has_validation_errors]
+            ok = sum(1 for cn in result.credit_notes if not cn.validation_errors)
+            errors = [cn for cn in result.credit_notes if cn.validation_errors]
             logging.info(f"CreditNotes batch: {ok} ok, {len(errors)} with validation errors")
             for cn in errors:
                 logging.warning(f"  CreditNote '{cn.credit_note_number}' validation errors: {cn.validation_errors}")

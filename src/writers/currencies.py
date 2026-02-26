@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List
 
-from xero_python.accounting.models import Currency
+from xero_python.accounting.models import Currency, CurrencyCode
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty
@@ -43,7 +43,7 @@ class CurrenciesWriter(BaseWriter):
         currency = Currency()
         code = row.get("Code")
         if not _is_empty(code):
-            currency.code = str(code).strip()
+            currency.code = CurrencyCode(str(code).strip())
         description = row.get("Description")
         if not _is_empty(description):
             currency.description = str(description).strip()

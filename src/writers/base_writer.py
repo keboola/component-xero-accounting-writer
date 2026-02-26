@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from datetime import date
 from typing import Any, Callable, Dict, List, Optional
 
 from xero_python.accounting import AccountingApi
@@ -30,6 +31,17 @@ def _to_float(value: Any) -> Optional[float]:
         return float(value)
     except (ValueError, TypeError):
         logging.warning(f"Cannot convert '{value}' to float, skipping field")
+        return None
+
+
+def _to_date(value: Any) -> Optional[date]:
+    """Convert a CSV string (YYYY-MM-DD) to datetime.date, or None if empty/invalid."""
+    if _is_empty(value):
+        return None
+    try:
+        return date.fromisoformat(str(value).strip())
+    except (ValueError, TypeError):
+        logging.warning(f"Cannot convert '{value}' to date, skipping field")
         return None
 
 

@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from xero_python.accounting.models import Account, BankTransaction, BankTransactions, Contact, LineItem
+from xero_python.accounting.models import Account, BankTransaction, BankTransactions, Contact, CurrencyCode, LineItem
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_bool, _to_float
@@ -48,18 +48,22 @@ class BankTransactionsWriter(BaseWriter):
             raise
 
     def _row_to_bank_transaction(self, row: Dict[str, Any]) -> BankTransaction:
-        txn = BankTransaction()
+        # BankTransaction constructor requires type, line_items, bank_account to be non-None
+        txn_type = self._get(row, "Type")
+        bank_account = self._build_bank_account(row) or Account()
+        line_item = self._build_line_item(row)
+        line_items = [line_item] if line_item else []
+
+        txn = BankTransaction(type=txn_type, line_items=line_items, bank_account=bank_account)
 
         if v := self._get(row, "BankTransactionID"):
             txn.bank_transaction_id = v
-        if v := self._get(row, "Type"):
-            txn.type = v
         if v := self._get(row, "Status"):
             txn.status = v
         if v := self._get(row, "Reference"):
             txn.reference = v
         if v := self._get(row, "CurrencyCode"):
-            txn.currency_code = v
+            txn.currency_code = CurrencyCode(v)
         if v := self._get(row, "Url"):
             txn.url = v
         if v := self._get(row, "DateString"):
@@ -76,14 +80,6 @@ class BankTransactionsWriter(BaseWriter):
         contact = self._build_contact(row)
         if contact:
             txn.contact = contact
-
-        bank_account = self._build_bank_account(row)
-        if bank_account:
-            txn.bank_account = bank_account
-
-        line_item = self._build_line_item(row)
-        if line_item:
-            txn.line_items = [line_item]
 
         return txn
 
@@ -141,8 +137,8 @@ class BankTransactionsWriter(BaseWriter):
     @staticmethod
     def _log_result(result) -> None:
         if hasattr(result, "bank_transactions") and result.bank_transactions:
-            ok = sum(1 for t in result.bank_transactions if not t.has_validation_errors)
-            errors = [t for t in result.bank_transactions if t.has_validation_errors]
+            ok = sum(1 for t in result.bank_transactions if not t.validation_errors)
+            errors = [t for t in result.bank_transactions if t.validation_errors]
             logging.info(f"BankTransactions batch: {ok} ok, {len(errors)} with validation errors")
             for t in errors:
                 logging.warning(f"  BankTransaction '{t.bank_transaction_id}' validation errors: {t.validation_errors}")
