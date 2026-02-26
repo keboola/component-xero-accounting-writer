@@ -1,0 +1,39 @@
+{
+  "parameters": {
+    "tenant_id": "e7e14df4-baf9-49ea-8964-9bf4abd97599",
+    "entities": [
+      {
+        "entity_type": "Employees",
+        "write_mode": "upsert",
+        "source_table": "employees.csv"
+      }
+    ]
+  },
+  "image_parameters": {},
+  "authorization": {
+    "oauth_api": {
+      "credentials": {
+        "id": "main",
+        "authorizedFor": "test",
+        "creator": {
+          "id": "0",
+          "description": "test"
+        },
+        "created": "2024-01-01 00:00:00",
+        "appKey": "DUMMY_CLIENT_ID",
+        "#appSecret": "DUMMY_CLIENT_SECRET",
+        "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+      }
+    }
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-vcr.employees",
+          "destination": "employees.csv"
+        }
+      ]
+    }
+  }
+}
