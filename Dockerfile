@@ -6,8 +6,8 @@ WORKDIR /code/
 COPY pyproject.toml .
 COPY uv.lock .
 
-RUN uv sync --all-groups --frozen
 ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
+RUN uv sync --all-groups --frozen
 
 COPY src/ src
 COPY tests/ tests
