@@ -1,8 +1,8 @@
 import csv
 import json
 import logging
-import requests
 
+import requests
 from keboola.component.base import ComponentBase, sync_action
 from keboola.component.exceptions import UserException
 from keboola.component.sync_actions import SelectElement
