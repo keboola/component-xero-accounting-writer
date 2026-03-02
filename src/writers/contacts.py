@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from xero_python.accounting.models import Address, Contact, Contacts, CurrencyCode, Phone
 from xero_python.api_client import ApiClient
@@ -24,11 +24,11 @@ class ContactsWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} contact(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         contacts = [self._row_to_contact(row) for row in batch]
         contacts_obj = Contacts(contacts=contacts)
         try:
@@ -49,7 +49,7 @@ class ContactsWriter(BaseWriter):
             logging.error(f"Failed to write contacts batch: {exc}")
             raise
 
-    def _row_to_contact(self, row: Dict[str, Any]) -> Contact:
+    def _row_to_contact(self, row: dict[str, Any]) -> Contact:
         contact = Contact()
 
         if v := self._get(row, "ContactID"):
@@ -100,7 +100,7 @@ class ContactsWriter(BaseWriter):
         return contact
 
     @staticmethod
-    def _build_phone(row: Dict[str, Any]) -> Optional[Phone]:
+    def _build_phone(row: dict[str, Any]) -> Phone | None:
         phone_number = row.get("Phone_PhoneNumber")
         if _is_empty(phone_number):
             return None
@@ -117,7 +117,7 @@ class ContactsWriter(BaseWriter):
         return phone
 
     @staticmethod
-    def _build_address(row: Dict[str, Any]) -> Optional[Address]:
+    def _build_address(row: dict[str, Any]) -> Address | None:
         has_address = any(
             not _is_empty(row.get(k))
             for k in (

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from xero_python.accounting.models import Account, Invoice, Payment, Payments
 from xero_python.api_client import ApiClient
@@ -19,11 +19,11 @@ class PaymentsWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} payment(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         payments = [self._row_to_payment(row) for row in batch]
         payments_obj = Payments(payments=payments)
         try:
@@ -38,7 +38,7 @@ class PaymentsWriter(BaseWriter):
             logging.error(f"Failed to write payments batch: {exc}")
             raise
 
-    def _row_to_payment(self, row: Dict[str, Any]) -> Payment:
+    def _row_to_payment(self, row: dict[str, Any]) -> Payment:
         payment = Payment()
 
         if v := self._get(row, "PaymentID"):
@@ -75,7 +75,7 @@ class PaymentsWriter(BaseWriter):
         return payment
 
     @staticmethod
-    def _build_invoice(row: Dict[str, Any]) -> Optional[Invoice]:
+    def _build_invoice(row: dict[str, Any]) -> Invoice | None:
         invoice_id = row.get("Invoice_InvoiceID")
         invoice_number = row.get("Invoice_InvoiceNumber")
         if _is_empty(invoice_id) and _is_empty(invoice_number):
@@ -88,7 +88,7 @@ class PaymentsWriter(BaseWriter):
         return invoice
 
     @staticmethod
-    def _build_account(row: Dict[str, Any]) -> Optional[Account]:
+    def _build_account(row: dict[str, Any]) -> Account | None:
         account_id = row.get("Account_AccountID")
         account_code = row.get("Account_Code")
         if _is_empty(account_id) and _is_empty(account_code):

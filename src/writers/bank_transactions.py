@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from xero_python.accounting.models import Account, BankTransaction, BankTransactions, Contact, CurrencyCode, LineItem
 from xero_python.api_client import ApiClient
@@ -22,11 +22,11 @@ class BankTransactionsWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} bank transaction(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         txns = [self._row_to_bank_transaction(row) for row in batch]
         txns_obj = BankTransactions(bank_transactions=txns)
         try:
@@ -47,7 +47,7 @@ class BankTransactionsWriter(BaseWriter):
             logging.error(f"Failed to write bank transactions batch: {exc}")
             raise
 
-    def _row_to_bank_transaction(self, row: Dict[str, Any]) -> BankTransaction:
+    def _row_to_bank_transaction(self, row: dict[str, Any]) -> BankTransaction:
         # BankTransaction constructor requires type, line_items, bank_account to be non-None
         txn_type = self._get(row, "Type")
         bank_account = self._build_bank_account(row) or Account()
@@ -84,7 +84,7 @@ class BankTransactionsWriter(BaseWriter):
         return txn
 
     @staticmethod
-    def _build_contact(row: Dict[str, Any]) -> Optional[Contact]:
+    def _build_contact(row: dict[str, Any]) -> Contact | None:
         contact_id = row.get("Contact_ContactID")
         contact_name = row.get("Contact_Name")
         if _is_empty(contact_id) and _is_empty(contact_name):
@@ -97,7 +97,7 @@ class BankTransactionsWriter(BaseWriter):
         return contact
 
     @staticmethod
-    def _build_bank_account(row: Dict[str, Any]) -> Optional[Account]:
+    def _build_bank_account(row: dict[str, Any]) -> Account | None:
         account_id = row.get("BankAccount_AccountID")
         account_code = row.get("BankAccount_Code")
         if _is_empty(account_id) and _is_empty(account_code):
@@ -110,7 +110,7 @@ class BankTransactionsWriter(BaseWriter):
         return account
 
     @staticmethod
-    def _build_line_item(row: Dict[str, Any]) -> Optional[LineItem]:
+    def _build_line_item(row: dict[str, Any]) -> LineItem | None:
         description = row.get("LineItem_Description")
         if _is_empty(description):
             return None

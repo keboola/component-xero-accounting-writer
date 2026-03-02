@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from xero_python.accounting.models import Currency, CurrencyCode
 from xero_python.api_client import ApiClient
@@ -17,13 +17,13 @@ class CurrenciesWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} currency/currencies to Xero")
         # Currencies endpoint only supports one at a time via create_currency
         for row in rows:
             self._write_single(row)
 
-    def _write_single(self, row: Dict[str, Any]) -> None:
+    def _write_single(self, row: dict[str, Any]) -> None:
         currency = self._row_to_currency(row)
         if not currency.code:
             logging.warning("Skipping currency row with no Code")
@@ -39,7 +39,7 @@ class CurrenciesWriter(BaseWriter):
             raise
 
     @staticmethod
-    def _row_to_currency(row: Dict[str, Any]) -> Currency:
+    def _row_to_currency(row: dict[str, Any]) -> Currency:
         currency = Currency()
         code = row.get("Code")
         if not _is_empty(code):

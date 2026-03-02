@@ -1,7 +1,8 @@
 import logging
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from datetime import date
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 from xero_python.accounting import AccountingApi
 from xero_python.api_client import ApiClient
@@ -14,7 +15,7 @@ def _is_empty(value: Any) -> bool:
     return value is None or (isinstance(value, str) and value.strip() == "")
 
 
-def _to_bool(value: Any) -> Optional[bool]:
+def _to_bool(value: Any) -> bool | None:
     """Convert a CSV string value to bool, or None if empty."""
     if _is_empty(value):
         return None
@@ -23,7 +24,7 @@ def _to_bool(value: Any) -> Optional[bool]:
     return str(value).strip().lower() in ("true", "1", "yes")
 
 
-def _to_float(value: Any) -> Optional[float]:
+def _to_float(value: Any) -> float | None:
     """Convert a CSV string value to float, or None if empty."""
     if _is_empty(value):
         return None
@@ -34,7 +35,7 @@ def _to_float(value: Any) -> Optional[float]:
         return None
 
 
-def _to_date(value: Any) -> Optional[date]:
+def _to_date(value: Any) -> date | None:
     """Convert a CSV string (YYYY-MM-DD) to datetime.date, or None if empty/invalid."""
     if _is_empty(value):
         return None
@@ -45,7 +46,7 @@ def _to_date(value: Any) -> Optional[date]:
         return None
 
 
-def _to_int(value: Any) -> Optional[int]:
+def _to_int(value: Any) -> int | None:
     """Convert a CSV string value to int, or None if empty."""
     if _is_empty(value):
         return None
@@ -66,14 +67,14 @@ class BaseWriter(ABC):
         self.write_mode = write_mode
 
     @abstractmethod
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         """Write rows to Xero. Must be implemented by subclasses."""
         pass
 
     def _process_in_batches(
         self,
-        rows: List[Dict[str, Any]],
-        batch_fn: Callable[[List[Dict[str, Any]]], None],
+        rows: list[dict[str, Any]],
+        batch_fn: Callable[[list[dict[str, Any]]], None],
     ) -> None:
         """Process rows in batches of BATCH_SIZE."""
         total = len(rows)
@@ -84,7 +85,7 @@ class BaseWriter(ABC):
             batch_fn(batch)
 
     @staticmethod
-    def _get(row: Dict[str, Any], key: str) -> Optional[str]:
+    def _get(row: dict[str, Any], key: str) -> str | None:
         """Get a string field from a CSV row, returning None if empty."""
         value = row.get(key)
         return None if _is_empty(value) else str(value).strip()

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from xero_python.accounting.models import Item, Items, Purchase
 from xero_python.api_client import ApiClient
@@ -19,11 +19,11 @@ class ItemsWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} item(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         items = [self._row_to_item(row) for row in batch]
         items_obj = Items(items=items)
         try:
@@ -44,7 +44,7 @@ class ItemsWriter(BaseWriter):
             logging.error(f"Failed to write items batch: {exc}")
             raise
 
-    def _row_to_item(self, row: Dict[str, Any]) -> Item:
+    def _row_to_item(self, row: dict[str, Any]) -> Item:
         code = self._get(row, "Code") or ""
         item = Item(code=code)
 
@@ -76,7 +76,7 @@ class ItemsWriter(BaseWriter):
         return item
 
     @staticmethod
-    def _build_purchase_details(row: Dict[str, Any]):
+    def _build_purchase_details(row: dict[str, Any]):
         unit_price = _to_float(row.get("PurchaseDetails_UnitPrice"))
         account_code = row.get("PurchaseDetails_AccountCode")
         if unit_price is None and _is_empty(account_code):
@@ -92,7 +92,7 @@ class ItemsWriter(BaseWriter):
         return purchase
 
     @staticmethod
-    def _build_sales_details(row: Dict[str, Any]):
+    def _build_sales_details(row: dict[str, Any]):
         unit_price = _to_float(row.get("SalesDetails_UnitPrice"))
         account_code = row.get("SalesDetails_AccountCode")
         if unit_price is None and _is_empty(account_code):

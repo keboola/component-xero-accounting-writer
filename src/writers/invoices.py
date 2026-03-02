@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from xero_python.accounting.models import Contact, CurrencyCode, Invoice, Invoices, LineItem
 from xero_python.api_client import ApiClient
@@ -23,11 +23,11 @@ class InvoicesWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} invoice(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         invoices = [self._row_to_invoice(row) for row in batch]
         invoices_obj = Invoices(invoices=invoices)
         try:
@@ -48,7 +48,7 @@ class InvoicesWriter(BaseWriter):
             logging.error(f"Failed to write invoices batch: {exc}")
             raise
 
-    def _row_to_invoice(self, row: Dict[str, Any]) -> Invoice:
+    def _row_to_invoice(self, row: dict[str, Any]) -> Invoice:
         invoice = Invoice()
 
         if v := self._get(row, "InvoiceID"):
@@ -87,7 +87,7 @@ class InvoicesWriter(BaseWriter):
         return invoice
 
     @staticmethod
-    def _build_contact(row: Dict[str, Any]) -> Optional[Contact]:
+    def _build_contact(row: dict[str, Any]) -> Contact | None:
         contact_id = row.get("Contact_ContactID")
         contact_name = row.get("Contact_Name")
         if _is_empty(contact_id) and _is_empty(contact_name):
@@ -100,7 +100,7 @@ class InvoicesWriter(BaseWriter):
         return contact
 
     @staticmethod
-    def _build_line_item(row: Dict[str, Any]) -> Optional[LineItem]:
+    def _build_line_item(row: dict[str, Any]) -> LineItem | None:
         description = row.get("LineItem_Description")
         if _is_empty(description):
             return None

@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 from keboola.component.exceptions import UserException
 from pydantic import BaseModel, Field, ValidationError
@@ -43,7 +42,7 @@ class EntityConfiguration(BaseModel):
 class RootConfiguration(BaseModel):
     """Root-level configuration."""
 
-    tenant_id: Optional[str] = Field(default=None)
+    tenant_id: str | None = Field(default=None)
     entities: list[EntityConfiguration] = Field(default_factory=list)
 
     def __init__(self, **data):

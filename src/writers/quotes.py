@@ -1,7 +1,7 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from xero_python.accounting.models import Contact, CurrencyCode, LineItem, Quote, QuoteStatusCodes, Quotes
+from xero_python.accounting.models import Contact, CurrencyCode, LineItem, Quote, Quotes, QuoteStatusCodes
 from xero_python.api_client import ApiClient
 
 from .base_writer import BaseWriter, _is_empty, _to_float
@@ -21,11 +21,11 @@ class QuotesWriter(BaseWriter):
     def __init__(self, api_client: ApiClient, tenant_id: str, write_mode: str) -> None:
         super().__init__(api_client, tenant_id, write_mode)
 
-    def write(self, rows: List[Dict[str, Any]]) -> None:
+    def write(self, rows: list[dict[str, Any]]) -> None:
         logging.info(f"Writing {len(rows)} quote(s) to Xero (mode={self.write_mode})")
         self._process_in_batches(rows, self._write_batch)
 
-    def _write_batch(self, batch: List[Dict[str, Any]]) -> None:
+    def _write_batch(self, batch: list[dict[str, Any]]) -> None:
         quotes = [self._row_to_quote(row) for row in batch]
         quotes_obj = Quotes(quotes=quotes)
         try:
@@ -46,7 +46,7 @@ class QuotesWriter(BaseWriter):
             logging.error(f"Failed to write quotes batch: {exc}")
             raise
 
-    def _row_to_quote(self, row: Dict[str, Any]) -> Quote:
+    def _row_to_quote(self, row: dict[str, Any]) -> Quote:
         quote = Quote()
 
         if v := self._get(row, "QuoteID"):
@@ -85,7 +85,7 @@ class QuotesWriter(BaseWriter):
         return quote
 
     @staticmethod
-    def _build_contact(row: Dict[str, Any]) -> Optional[Contact]:
+    def _build_contact(row: dict[str, Any]) -> Contact | None:
         contact_id = row.get("Contact_ContactID")
         contact_name = row.get("Contact_Name")
         if _is_empty(contact_id) and _is_empty(contact_name):
@@ -98,7 +98,7 @@ class QuotesWriter(BaseWriter):
         return contact
 
     @staticmethod
-    def _build_line_item(row: Dict[str, Any]) -> Optional[LineItem]:
+    def _build_line_item(row: dict[str, Any]) -> LineItem | None:
         description = row.get("LineItem_Description")
         if _is_empty(description):
             return None

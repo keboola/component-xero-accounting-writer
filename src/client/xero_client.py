@@ -1,6 +1,5 @@
 import logging
 from http.client import RemoteDisconnected
-from typing import Dict, List, Optional
 
 from keboola.component.dao import OauthCredentials
 from ratelimit import limits, sleep_and_retry
@@ -23,7 +22,7 @@ class XeroException(Exception):
 
 class XeroClient:
     def __init__(self, oauth_credentials: OauthCredentials) -> None:
-        self._oauth_token_dict: Dict = oauth_credentials.data
+        self._oauth_token_dict: dict = oauth_credentials.data
 
         oauth2_token_obj = OAuth2Token(
             client_id=oauth_credentials.appKey,
@@ -36,13 +35,13 @@ class XeroClient:
             oauth2_token_getter=self.get_xero_oauth2_token_dict,
             oauth2_token_saver=self._set_xero_oauth2_token_dict,
         )
-        self._available_tenant_ids: Optional[List[str]] = None
-        self._available_tenants: Optional[List[Dict]] = None
+        self._available_tenant_ids: list[str] | None = None
+        self._available_tenants: list[dict] | None = None
 
-    def get_xero_oauth2_token_dict(self) -> Dict:
+    def get_xero_oauth2_token_dict(self) -> dict:
         return self._oauth_token_dict
 
-    def _set_xero_oauth2_token_dict(self, new_token: Dict) -> None:
+    def _set_xero_oauth2_token_dict(self, new_token: dict) -> None:
         self._oauth_token_dict = new_token
 
     @property
@@ -61,12 +60,12 @@ class XeroClient:
         except (HTTPStatusException, ProtocolError) as error:
             raise XeroException("Failed to authenticate the client, please reauthorize the component") from error
 
-    def get_available_tenant_ids(self) -> List[str]:
+    def get_available_tenant_ids(self) -> list[str]:
         if not self._available_tenant_ids:
             self._refresh_available_tenants()
         return self._available_tenant_ids  # type: ignore[return-value]
 
-    def get_available_tenants(self) -> List[Dict]:
+    def get_available_tenants(self) -> list[dict]:
         """Return list of dicts with 'id' and 'name' for each available tenant."""
         if not self._available_tenants:
             self._refresh_available_tenants()
@@ -74,7 +73,7 @@ class XeroClient:
 
     def _refresh_available_tenants(self) -> None:
         identity_api = IdentityApi(self._api_client)
-        tenants: List[Dict] = []
+        tenants: list[dict] = []
         try:
             for connection in identity_api.get_connections():
                 t = serialize(connection)

@@ -1,7 +1,6 @@
 import csv
 import json
 import logging
-from typing import Dict, List, Union
 
 from keboola.component.base import ComponentBase, sync_action
 from keboola.component.exceptions import UserException
@@ -27,7 +26,7 @@ from writers import (
 
 KEY_STATE_OAUTH_TOKEN_DICT = "#oauth_token_dict"
 
-WRITER_MAP: Dict[EntityType, type] = {
+WRITER_MAP: dict[EntityType, type] = {
     EntityType.contacts: ContactsWriter,
     EntityType.invoices: InvoicesWriter,
     EntityType.payments: PaymentsWriter,
@@ -90,7 +89,7 @@ class Component(ComponentBase):
             logging.info("Initializing client from OAuth credentials")
             self._init_client_from_config()
 
-    def _init_client_from_state(self, state_token: Union[str, Dict]) -> None:
+    def _init_client_from_state(self, state_token: str | dict) -> None:
         oauth_credentials = self.configuration.oauth_credentials
         oauth_credentials.data = self._parse_state_token(state_token)
         self.client = XeroClient(oauth_credentials)
@@ -138,7 +137,7 @@ class Component(ComponentBase):
         return all(k in token for k in ("access_token", "scope", "expires_in", "token_type"))
 
     @staticmethod
-    def _parse_state_token(state_token: Union[str, Dict]) -> Dict:
+    def _parse_state_token(state_token: str | dict) -> dict:
         if isinstance(state_token, str):
             return json.loads(state_token)
         if isinstance(state_token, dict):
@@ -175,7 +174,7 @@ class Component(ComponentBase):
     # ------------------------------------------------------------------ #
 
     @staticmethod
-    def _read_csv(file_path: str) -> List[Dict]:
+    def _read_csv(file_path: str) -> list[dict]:
         rows = []
         with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
