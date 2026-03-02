@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+import requests
 
 from keboola.component.base import ComponentBase, sync_action
 from keboola.component.exceptions import UserException
@@ -123,6 +124,36 @@ class Component(ComponentBase):
         new_state[KEY_STATE_OAUTH_TOKEN_DICT] = json.dumps(self.client.get_xero_oauth2_token_dict())
         self.write_state_file(new_state)
 
+    def _save_config_state_via_api(self) -> None:
+        """Persist current state to Keboola Storage API.
+
+        Sync actions do not persist local state files automatically.
+        This call ensures the refreshed OAuth token survives across runs.
+        """
+        storage_url = self.environment_variables.url
+        token = self.environment_variables.token
+        component_id = self.environment_variables.component_id
+        config_id = self.environment_variables.config_id
+
+        if not all([storage_url, token, component_id, config_id]):
+            logging.debug("Missing KBC environment variables — skipping Storage API state persist")
+            return
+
+        state = self.get_state_file()
+        url = (
+            f"{storage_url}/v2/storage/branch/default/components/"
+            f"{component_id}/configs/{config_id}/state"
+        )
+        headers = {"X-StorageApi-Token": token, "Content-Type": "application/json"}
+        payload = {"state": {"component": state}}
+
+        try:
+            response = requests.put(url, headers=headers, json=payload, timeout=30)
+            response.raise_for_status()
+            logging.info("Configuration state persisted to Storage API")
+        except Exception as exc:
+            logging.error(f"Failed to save configuration state to Storage API: {exc}")
+
     @staticmethod
     def _state_has_valid_token(state_token) -> bool:
         if not state_token:
@@ -200,6 +231,7 @@ class Component(ComponentBase):
     def list_tenants(self):
         """Return available Xero tenants for the dropdown in root config."""
         self._init_client()
+        self._save_config_state_via_api()
         try:
             tenants = self.client.get_available_tenants()
         except XeroException as exc:

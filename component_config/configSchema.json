@@ -12,8 +12,7 @@
       "options": {
         "async": {
           "label": "Re-load tenants",
-          "action": "listTenants",
-          "autoload": []
+          "action": "listTenants"
         }
       }
     },
