@@ -26,16 +26,6 @@ dev = [
     "ruff>=0.15.2",
 ]
 
-[[tool.uv.index]]
-name = "testpypi"
-url = "https://test.pypi.org/simple/"
-explicit = true
-
-[tool.uv.sources]
-"keboola.component" = { index = "testpypi" }
-"keboola.vcr" = { index = "testpypi" }
-"keboola.datadirtest" = { index = "testpypi" }
-
 [tool.ruff]
 line-length = 120
 target-version = "py310"

@@ -1,9 +1,6 @@
 FROM python:3.13-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Required for building xero-python, regex, ratelimit (C extensions)
-RUN apt-get update && apt-get install -y build-essential
-
 WORKDIR /code/
 
 COPY pyproject.toml .
