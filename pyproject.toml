@@ -10,11 +10,11 @@ dependencies = [
     "keboola-utils>=1.1.0",
     "mock~=5.1.0",
     "pydantic~=2.0",
-    "xero-python==4.0.0",
+    "xero-python~=4.0.0",
     "dateparser~=1.2.0",
-    "regex==2022.03.02",
+    "regex>=2022.03.02",
     "tenacity~=9.0.0",
-    "ratelimit==2.2.1",
+    "ratelimit>=2.2.1",
     "urllib3~=2.2.3",
 ]
 
