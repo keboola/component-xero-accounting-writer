@@ -140,10 +140,7 @@ class Component(ComponentBase):
             return
 
         state = self.get_state_file()
-        url = (
-            f"{storage_url}/v2/storage/branch/default/components/"
-            f"{component_id}/configs/{config_id}/state"
-        )
+        url = f"{storage_url}/v2/storage/branch/default/components/{component_id}/configs/{config_id}/state"
         headers = {"X-StorageApi-Token": token, "Content-Type": "application/json"}
         payload = {"state": {"component": state}}
 
