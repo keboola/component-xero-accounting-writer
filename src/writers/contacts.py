@@ -150,11 +150,17 @@ class ContactsWriter(BaseWriter):
                 setattr(address, attr, str(v).strip())
         return address
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "contacts") and result.contacts:
             ok = sum(1 for c in result.contacts if not c.validation_errors)
             errors = [c for c in result.contacts if c.validation_errors]
             logging.info(f"Contacts batch: {ok} ok, {len(errors)} with validation errors")
             for c in errors:
                 logging.warning(f"  Contact '{c.name}' validation errors: {c.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "Contacts",
+                        "record_id": str(c.name or ""),
+                        "errors": self._extract_error_messages(c.validation_errors),
+                    }
+                )

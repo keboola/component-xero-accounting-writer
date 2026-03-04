@@ -7,7 +7,8 @@
         "write_mode": "upsert",
         "source_table": "purchase_orders.csv"
       }
-    ]
+    ],
+    "skip_validation_errors": true
   },
   "image_parameters": {},
   "authorization": {

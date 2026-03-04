@@ -123,11 +123,17 @@ class QuotesWriter(BaseWriter):
                 line_item.item_code = str(v).strip()
         return line_item
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "quotes") and result.quotes:
             ok = sum(1 for q in result.quotes if not q.validation_errors)
             errors = [q for q in result.quotes if q.validation_errors]
             logging.info(f"Quotes batch: {ok} ok, {len(errors)} with validation errors")
             for q in errors:
                 logging.warning(f"  Quote '{q.quote_number}' validation errors: {q.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "Quotes",
+                        "record_id": str(q.quote_number or ""),
+                        "errors": self._extract_error_messages(q.validation_errors),
+                    }
+                )

@@ -43,6 +43,8 @@ class RootConfiguration(BaseModel):
     """Root-level configuration."""
 
     tenant_id: str | None = Field(default=None)
+    skip_validation_errors: bool = Field(default=False)
+    create_errors_table: bool = Field(default=False)
     entities: list[EntityConfiguration] = Field(default_factory=list)
 
     def __init__(self, **data):

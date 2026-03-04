@@ -16,6 +16,20 @@
         }
       }
     },
+    "skip_validation_errors": {
+      "type": "boolean",
+      "title": "Skip Validation Errors",
+      "description": "When enabled, records that fail Xero validation are skipped with a warning. When disabled (default), the job fails if any record has validation errors.",
+      "default": false,
+      "propertyOrder": 15
+    },
+    "create_errors_table": {
+      "type": "boolean",
+      "title": "Create Errors Table",
+      "description": "When enabled, records that fail Xero validation are written to an output table 'validation_errors' with columns: entity_type, record_id, errors.",
+      "default": false,
+      "propertyOrder": 16
+    },
     "entities": {
       "title": "Entities to Write",
       "type": "array",

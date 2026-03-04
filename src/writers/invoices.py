@@ -132,11 +132,17 @@ class InvoicesWriter(BaseWriter):
                 line_item.line_item_id = str(v).strip()
         return line_item
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "invoices") and result.invoices:
             ok = sum(1 for inv in result.invoices if not inv.validation_errors)
             errors = [inv for inv in result.invoices if inv.validation_errors]
             logging.info(f"Invoices batch: {ok} ok, {len(errors)} with validation errors")
             for inv in errors:
                 logging.warning(f"  Invoice '{inv.invoice_number}' validation errors: {inv.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "Invoices",
+                        "record_id": str(inv.invoice_number or ""),
+                        "errors": self._extract_error_messages(inv.validation_errors),
+                    }
+                )

@@ -135,11 +135,17 @@ class BankTransactionsWriter(BaseWriter):
                 line_item.item_code = str(v).strip()
         return line_item
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "bank_transactions") and result.bank_transactions:
             ok = sum(1 for t in result.bank_transactions if not t.validation_errors)
             errors = [t for t in result.bank_transactions if t.validation_errors]
             logging.info(f"BankTransactions batch: {ok} ok, {len(errors)} with validation errors")
             for t in errors:
                 logging.warning(f"  BankTransaction '{t.bank_transaction_id}' validation errors: {t.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "BankTransactions",
+                        "record_id": str(t.bank_transaction_id or ""),
+                        "errors": self._extract_error_messages(t.validation_errors),
+                    }
+                )

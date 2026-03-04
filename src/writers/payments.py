@@ -101,11 +101,17 @@ class PaymentsWriter(BaseWriter):
             account.code = str(account_code).strip()
         return account
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "payments") and result.payments:
             ok = sum(1 for p in result.payments if not p.validation_errors)
             errors = [p for p in result.payments if p.validation_errors]
             logging.info(f"Payments batch: {ok} ok, {len(errors)} with validation errors")
             for p in errors:
                 logging.warning(f"  Payment '{p.payment_id}' validation errors: {p.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "Payments",
+                        "record_id": str(p.payment_id or ""),
+                        "errors": self._extract_error_messages(p.validation_errors),
+                    }
+                )

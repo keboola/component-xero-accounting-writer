@@ -65,6 +65,17 @@ class BaseWriter(ABC):
         self._raw_api_client = api_client
         self.tenant_id = tenant_id
         self.write_mode = write_mode
+        self.collected_errors: list[dict] = []
+
+    @staticmethod
+    def _extract_error_messages(validation_errors) -> str:
+        msgs = []
+        for ve in validation_errors or []:
+            if isinstance(ve, dict):
+                msgs.append(ve.get("message", str(ve)))
+            else:
+                msgs.append(str(ve))
+        return "; ".join(msgs)
 
     @abstractmethod
     def write(self, rows: list[dict[str, Any]]) -> None:

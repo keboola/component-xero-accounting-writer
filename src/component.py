@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+import os
 
 import requests
 from keboola.component.base import ComponentBase, sync_action
@@ -59,6 +60,8 @@ class Component(ComponentBase):
 
         input_tables = {t.name.removesuffix(".csv"): t for t in self.get_input_tables_definitions()}
 
+        all_validation_errors: list[dict] = []
+
         for entity_cfg in root_config.entities:
             source_key = entity_cfg.source_table.removesuffix(".csv")
             table_def = input_tables.get(source_key)
@@ -72,6 +75,16 @@ class Component(ComponentBase):
 
             writer = self._build_writer(entity_cfg.entity_type, entity_cfg.write_mode.value, tenant_id)
             writer.write(rows)
+            all_validation_errors.extend(writer.collected_errors)
+
+        if all_validation_errors:
+            if root_config.create_errors_table:
+                self._write_validation_errors_table(all_validation_errors)
+            if not root_config.skip_validation_errors:
+                raise UserException(
+                    f"Validation errors occurred in {len(all_validation_errors)} record(s). "
+                    "Check the job logs for details or enable 'Create Errors Table' to export them."
+                )
 
         self._refresh_token_and_save_state()
 
@@ -210,6 +223,15 @@ class Component(ComponentBase):
             for row in reader:
                 rows.append(dict(row))
         return rows
+
+    def _write_validation_errors_table(self, errors: list[dict]) -> None:
+        out_path = os.path.join(self.tables_out_path, "validation_errors.csv")
+        os.makedirs(self.tables_out_path, exist_ok=True)
+        with open(out_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=["entity_type", "record_id", "errors"])
+            writer.writeheader()
+            writer.writerows(errors)
+        logging.info(f"Validation errors table written with {len(errors)} row(s) to 'validation_errors'")
 
     # ------------------------------------------------------------------ #
     # Writer factory                                                        #

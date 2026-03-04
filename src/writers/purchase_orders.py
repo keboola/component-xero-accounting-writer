@@ -126,11 +126,17 @@ class PurchaseOrdersWriter(BaseWriter):
                 line_item.item_code = str(v).strip()
         return line_item
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "purchase_orders") and result.purchase_orders:
             ok = sum(1 for po in result.purchase_orders if not po.validation_errors)
             errors = [po for po in result.purchase_orders if po.validation_errors]
             logging.info(f"PurchaseOrders batch: {ok} ok, {len(errors)} with validation errors")
             for po in errors:
                 logging.warning(f"  PO '{po.purchase_order_number}' validation errors: {po.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "PurchaseOrders",
+                        "record_id": str(po.purchase_order_number or ""),
+                        "errors": self._extract_error_messages(po.validation_errors),
+                    }
+                )

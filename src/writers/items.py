@@ -109,11 +109,17 @@ class ItemsWriter(BaseWriter):
                 sales.tax_type = str(v).strip()
         return sales
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "items") and result.items:
             ok = sum(1 for it in result.items if not it.validation_errors)
             errors = [it for it in result.items if it.validation_errors]
             logging.info(f"Items batch: {ok} ok, {len(errors)} with validation errors")
             for it in errors:
                 logging.warning(f"  Item '{it.code}' validation errors: {it.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "Items",
+                        "record_id": str(it.code or ""),
+                        "errors": self._extract_error_messages(it.validation_errors),
+                    }
+                )

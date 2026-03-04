@@ -88,11 +88,17 @@ class ManualJournalsWriter(BaseWriter):
                 line.tax_type = str(v).strip()
         return line
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "manual_journals") and result.manual_journals:
             ok = sum(1 for j in result.manual_journals if not j.validation_errors)
             errors = [j for j in result.manual_journals if j.validation_errors]
             logging.info(f"ManualJournals batch: {ok} ok, {len(errors)} with validation errors")
             for j in errors:
                 logging.warning(f"  Journal '{j.narration}' validation errors: {j.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "ManualJournals",
+                        "record_id": str(j.narration or ""),
+                        "errors": self._extract_error_messages(j.validation_errors),
+                    }
+                )

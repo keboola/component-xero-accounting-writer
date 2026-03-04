@@ -119,11 +119,17 @@ class CreditNotesWriter(BaseWriter):
                 line_item.item_code = str(v).strip()
         return line_item
 
-    @staticmethod
-    def _log_result(result) -> None:
+    def _log_result(self, result) -> None:
         if hasattr(result, "credit_notes") and result.credit_notes:
             ok = sum(1 for cn in result.credit_notes if not cn.validation_errors)
             errors = [cn for cn in result.credit_notes if cn.validation_errors]
             logging.info(f"CreditNotes batch: {ok} ok, {len(errors)} with validation errors")
             for cn in errors:
                 logging.warning(f"  CreditNote '{cn.credit_note_number}' validation errors: {cn.validation_errors}")
+                self.collected_errors.append(
+                    {
+                        "entity_type": "CreditNotes",
+                        "record_id": str(cn.credit_note_number or ""),
+                        "errors": self._extract_error_messages(cn.validation_errors),
+                    }
+                )
