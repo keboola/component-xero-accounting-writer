@@ -57,10 +57,11 @@ class Component(ComponentBase):
         if not root_config.entities:
             raise UserException("No entities configured. Add at least one entity in the 'Entities to Write' list.")
 
-        input_tables = {t.name: t for t in self.get_input_tables_definitions()}
+        input_tables = {t.name.removesuffix(".csv"): t for t in self.get_input_tables_definitions()}
 
         for entity_cfg in root_config.entities:
-            table_def = input_tables.get(entity_cfg.source_table)
+            source_key = entity_cfg.source_table.removesuffix(".csv")
+            table_def = input_tables.get(source_key)
             if table_def is None:
                 raise UserException(
                     f"Input table '{entity_cfg.source_table}' not found for entity "
