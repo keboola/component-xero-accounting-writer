@@ -235,6 +235,8 @@ class Component(ComponentBase):
             writer = csv.DictWriter(f, fieldnames=["entity_type", "record_id", "errors"])
             writer.writeheader()
             writer.writerows(errors)
+        with open(out_path + ".manifest", "w", encoding="utf-8") as f:
+            json.dump({"incremental": False}, f)
         logging.info(f"Validation errors table written with {len(errors)} row(s) to 'validation_errors'")
 
     # ------------------------------------------------------------------ #
