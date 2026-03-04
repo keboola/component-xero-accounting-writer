@@ -1,7 +1,6 @@
 import csv
 import json
 import logging
-import os
 
 import requests
 from keboola.component.base import ComponentBase, sync_action
@@ -229,14 +228,16 @@ class Component(ComponentBase):
         return rows
 
     def _write_validation_errors_table(self, errors: list[dict]) -> None:
-        out_path = os.path.join(self.tables_out_path, "validation_errors.csv")
-        os.makedirs(self.tables_out_path, exist_ok=True)
-        with open(out_path, "w", newline="", encoding="utf-8") as f:
+        component_id = (self.environment_variables.component_id or "keboola.wr-xero-accounting").replace(".", "-")
+        destination = f"out.c-{component_id}.validation_errors"
+        table_def = self.create_out_table_definition(
+            "validation_errors.csv", incremental=False, destination=destination
+        )
+        with open(table_def.full_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=["entity_type", "record_id", "errors"])
             writer.writeheader()
             writer.writerows(errors)
-        with open(out_path + ".manifest", "w", encoding="utf-8") as f:
-            json.dump({"incremental": False}, f)
+        self.write_tabledef_manifest(table_def)
         logging.info(f"Validation errors table written with {len(errors)} row(s) to 'validation_errors'")
 
     # ------------------------------------------------------------------ #
