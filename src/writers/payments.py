@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Account, Invoice, Payment, Payments
 from xero_python.api_client import ApiClient
 
@@ -36,7 +37,7 @@ class PaymentsWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write payments batch: {exc}")
-            raise
+            raise UserException(f"Failed to write payments batch: {exc}") from exc
 
     def _row_to_payment(self, row: dict[str, Any]) -> Payment:
         payment = Payment()

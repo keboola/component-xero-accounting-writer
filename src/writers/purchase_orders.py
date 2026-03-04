@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Contact, CurrencyCode, LineItem, PurchaseOrder, PurchaseOrders
 from xero_python.api_client import ApiClient
 
@@ -45,7 +46,7 @@ class PurchaseOrdersWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write purchase orders batch: {exc}")
-            raise
+            raise UserException(f"Failed to write purchase orders batch: {exc}") from exc
 
     def _row_to_po(self, row: dict[str, Any]) -> PurchaseOrder:
         po = PurchaseOrder()

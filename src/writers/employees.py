@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Employee, Employees
 from xero_python.api_client import ApiClient
 
@@ -40,7 +41,7 @@ class EmployeesWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write employees batch: {exc}")
-            raise
+            raise UserException(f"Failed to write employees batch: {exc}") from exc
 
     def _row_to_employee(self, row: dict[str, Any]) -> Employee:
         employee = Employee()

@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Address, Contact, Contacts, CurrencyCode, Phone
 from xero_python.api_client import ApiClient
 
@@ -47,7 +48,7 @@ class ContactsWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write contacts batch: {exc}")
-            raise
+            raise UserException(f"Failed to write contacts batch: {exc}") from exc
 
     def _row_to_contact(self, row: dict[str, Any]) -> Contact:
         contact = Contact()

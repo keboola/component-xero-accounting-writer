@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Item, Items, Purchase
 from xero_python.api_client import ApiClient
 
@@ -42,7 +43,7 @@ class ItemsWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write items batch: {exc}")
-            raise
+            raise UserException(f"Failed to write items batch: {exc}") from exc
 
     def _row_to_item(self, row: dict[str, Any]) -> Item:
         code = self._get(row, "Code") or ""

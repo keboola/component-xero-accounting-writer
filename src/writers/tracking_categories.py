@@ -1,8 +1,10 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import TrackingCategory
 from xero_python.api_client import ApiClient
+from xero_python.exceptions import ApiException
 
 from .base_writer import BaseWriter
 
@@ -42,9 +44,11 @@ class TrackingCategoriesWriter(BaseWriter):
                     category,
                 )
                 logging.info(f"Created tracking category '{category.name}'")
-        except Exception as exc:
-            logging.error(f"Failed to write tracking category '{category.name}': {exc}")
-            raise
+        except ApiException as exc:
+            if exc.status == 400 and "unique category name" in str(exc.body).lower():
+                logging.warning(f"Tracking category '{category.name}' already exists in Xero, skipping")
+            else:
+                raise UserException(f"Failed to write tracking category '{category.name}': {exc}") from exc
 
     def _row_to_tracking_category(self, row: dict[str, Any]) -> TrackingCategory:
         category = TrackingCategory()

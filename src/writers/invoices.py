@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Contact, CurrencyCode, Invoice, Invoices, LineItem
 from xero_python.api_client import ApiClient
 
@@ -46,7 +47,7 @@ class InvoicesWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write invoices batch: {exc}")
-            raise
+            raise UserException(f"Failed to write invoices batch: {exc}") from exc
 
     def _row_to_invoice(self, row: dict[str, Any]) -> Invoice:
         invoice = Invoice()

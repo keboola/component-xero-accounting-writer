@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Contact, CreditNote, CreditNotes, CurrencyCode, LineItem
 from xero_python.api_client import ApiClient
 
@@ -44,7 +45,7 @@ class CreditNotesWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write credit notes batch: {exc}")
-            raise
+            raise UserException(f"Failed to write credit notes batch: {exc}") from exc
 
     def _row_to_credit_note(self, row: dict[str, Any]) -> CreditNote:
         note = CreditNote()

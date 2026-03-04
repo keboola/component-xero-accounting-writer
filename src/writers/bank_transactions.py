@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Account, BankTransaction, BankTransactions, Contact, CurrencyCode, LineItem
 from xero_python.api_client import ApiClient
 
@@ -45,7 +46,7 @@ class BankTransactionsWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write bank transactions batch: {exc}")
-            raise
+            raise UserException(f"Failed to write bank transactions batch: {exc}") from exc
 
     def _row_to_bank_transaction(self, row: dict[str, Any]) -> BankTransaction:
         # BankTransaction constructor requires type, line_items, bank_account to be non-None

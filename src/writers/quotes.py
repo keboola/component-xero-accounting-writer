@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from keboola.component.exceptions import UserException
 from xero_python.accounting.models import Contact, CurrencyCode, LineItem, Quote, Quotes, QuoteStatusCodes
 from xero_python.api_client import ApiClient
 
@@ -44,7 +45,7 @@ class QuotesWriter(BaseWriter):
             self._log_result(result)
         except Exception as exc:
             logging.error(f"Failed to write quotes batch: {exc}")
-            raise
+            raise UserException(f"Failed to write quotes batch: {exc}") from exc
 
     def _row_to_quote(self, row: dict[str, Any]) -> Quote:
         quote = Quote()
