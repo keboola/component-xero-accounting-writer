@@ -75,16 +75,20 @@ class Component(ComponentBase):
 
             writer = self._build_writer(entity_cfg.entity_type, entity_cfg.write_mode.value, tenant_id)
             writer.write(rows)
-            all_validation_errors.extend(writer.collected_errors)
 
-        if all_validation_errors:
-            if root_config.create_errors_table:
-                self._write_validation_errors_table(all_validation_errors)
-            if not root_config.skip_validation_errors:
-                raise UserException(
-                    f"Validation errors occurred in {len(all_validation_errors)} record(s). "
-                    "Check the job logs for details or enable 'Create Errors Table' to export them."
-                )
+            if writer.collected_errors:
+                all_validation_errors.extend(writer.collected_errors)
+                if not root_config.skip_validation_errors:
+                    if root_config.create_errors_table:
+                        self._write_validation_errors_table(all_validation_errors)
+                    raise UserException(
+                        f"Validation errors occurred in {len(writer.collected_errors)} record(s) "
+                        f"for entity '{entity_cfg.entity_type.value}'. "
+                        "Check the job logs for details or enable 'Create Errors Table' to export them."
+                    )
+
+        if all_validation_errors and root_config.create_errors_table:
+            self._write_validation_errors_table(all_validation_errors)
 
         self._refresh_token_and_save_state()
 
