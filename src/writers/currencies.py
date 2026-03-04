@@ -3,6 +3,7 @@ from typing import Any
 
 from xero_python.accounting.models import Currency, CurrencyCode
 from xero_python.api_client import ApiClient
+from xero_python.exceptions import ApiException
 
 from .base_writer import BaseWriter, _is_empty
 
@@ -34,9 +35,12 @@ class CurrenciesWriter(BaseWriter):
                 logging.info(f"Currency '{currency.code}' written successfully")
             else:
                 logging.info(f"Currency '{currency.code}' processed (may already exist)")
-        except Exception as exc:
-            logging.error(f"Failed to write currency '{currency.code}': {exc}")
-            raise
+        except ApiException as exc:
+            if exc.status == 400 and "already subscribed" in str(exc.body).lower():
+                logging.warning(f"Currency '{currency.code}' already exists in Xero, skipping")
+            else:
+                logging.error(f"Failed to write currency '{currency.code}': {exc}")
+                raise
 
     @staticmethod
     def _row_to_currency(row: dict[str, Any]) -> Currency:
