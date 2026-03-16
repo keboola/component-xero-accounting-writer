@@ -282,6 +282,10 @@ class Component(ComponentBase):
 
     def _init_client_from_state(self, state_token: str | dict) -> None:
         oauth_credentials = self.configuration.oauth_credentials
+        if oauth_credentials is None:
+            logging.warning("No OAuth credentials in config, cannot restore from state — falling back")
+            self._init_client_from_config()
+            return
         oauth_credentials.data = self._parse_state_token(state_token)
         self.client = XeroClient(oauth_credentials)
         try:
@@ -293,6 +297,8 @@ class Component(ComponentBase):
 
     def _init_client_from_config(self) -> None:
         oauth_credentials = self.configuration.oauth_credentials
+        if oauth_credentials is None:
+            raise UserException("No OAuth credentials found. Please authorize the component before running.")
         if isinstance(oauth_credentials.data.get("scope"), str):
             oauth_credentials.data["scope"] = oauth_credentials.data["scope"].split(" ")
         self.client = XeroClient(oauth_credentials)
