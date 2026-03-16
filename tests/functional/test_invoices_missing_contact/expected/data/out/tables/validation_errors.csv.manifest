@@ -1,0 +1,9 @@
+{
+  "destination": "out.c-keboola-wr-xero-accounting.validation_errors",
+  "incremental": false,
+  "write_always": false,
+  "delimiter": ",",
+  "enclosure": "\"",
+  "manifest_type": "out",
+  "has_header": true
+}

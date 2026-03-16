@@ -1,0 +1,3 @@
+InvoiceID,InvoiceNumber,Type,Status,Reference,CurrencyCode,DateString,DueDateString,Contact_ContactID,Contact_Name,LineItem_Description,LineItem_Quantity,LineItem_UnitAmount,LineItem_AccountCode,LineItem_TaxType
+,INV-NC-001,ACCREC,DRAFT,PO-NC-001,USD,2025-01-15,2025-02-15,,,Consulting services,5,200.00,200,NONE
+,INV-NC-002,ACCREC,DRAFT,PO-NC-002,GBP,2025-02-01,2025-03-01,,,Software licence,1,500.00,410,NONE

@@ -8,7 +8,7 @@ from keboola.component.exceptions import UserException
 from keboola.component.sync_actions import SelectElement
 
 from client import XeroClient, XeroException
-from configuration import EntityType, RootConfiguration
+from configuration import ColumnMapping, EntityType, RootConfiguration
 from writers import (
     BankTransactionsWriter,
     BaseWriter,
@@ -71,6 +71,11 @@ class Component(ComponentBase):
                 )
             rows = self._read_csv(table_def.full_path)
             logging.info(f"[{entity_cfg.entity_type.value}] Loaded {len(rows)} row(s) from '{entity_cfg.source_table}'")
+            if entity_cfg.column_mapping:
+                rows = self._apply_column_mapping(rows, entity_cfg.column_mapping)
+                logging.info(
+                    f"[{entity_cfg.entity_type.value}] Applied column mapping: {len(entity_cfg.column_mapping)} column(s)"
+                )
 
             writer = self._build_writer(entity_cfg.entity_type, entity_cfg.write_mode.value, tenant_id)
             writer.write(rows)
@@ -219,6 +224,12 @@ class Component(ComponentBase):
     # ------------------------------------------------------------------ #
 
     @staticmethod
+    def _apply_column_mapping(rows: list[dict], mapping: list[ColumnMapping]) -> list[dict]:
+        """Rename columns according to mapping and drop unmapped columns."""
+        col_map = {cm.source: cm.destination for cm in mapping}
+        return [{col_map[k]: v for k, v in row.items() if k in col_map} for row in rows]
+
+    @staticmethod
     def _read_csv(file_path: str) -> list[dict]:
         rows = []
         with open(file_path, newline="", encoding="utf-8") as f:
@@ -237,7 +248,7 @@ class Component(ComponentBase):
             writer = csv.DictWriter(f, fieldnames=["entity_type", "record_id", "errors"])
             writer.writeheader()
             writer.writerows(errors)
-        self.write_tabledef_manifest(table_def)
+        self.write_manifest(table_def)
         logging.info(f"Validation errors table written with {len(errors)} row(s) to 'validation_errors'")
 
     # ------------------------------------------------------------------ #

@@ -1,0 +1,4 @@
+Name,EmailAddress,IsCustomer,IsSupplier,ContactNumber,AccountNumber,FirstName,LastName,TaxNumber,DefaultCurrency,Phone_PhoneType,Phone_PhoneNumber,Phone_PhoneAreaCode,Phone_PhoneCountryCode,Address_AddressType,Address_AddressLine1,Address_City,Address_Region,Address_PostalCode,Address_Country
+Minimal Corp,,true,false,,,,,,,,,,,,,,,,,
+Name Only Ltd,,false,false,,,,,,,,,,,,,,,,,
+Email Only Inc,contact@emailonly.example,true,false,,,,,,,,,,,,,,,,,

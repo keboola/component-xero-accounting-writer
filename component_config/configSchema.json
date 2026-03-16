@@ -90,6 +90,28 @@
             "description": "The destination name of the input table as configured in storage mapping.",
             "type": "string",
             "propertyOrder": 30
+          },
+          "column_mapping": {
+            "title": "Column Mapping",
+            "description": "Map input table columns to Xero field names. If empty, all columns are passed as-is.",
+            "type": "array",
+            "format": "table",
+            "propertyOrder": 40,
+            "items": {
+              "type": "object",
+              "required": ["source", "destination"],
+              "title": "Column",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "title": "Source Column"
+                },
+                "destination": {
+                  "type": "string",
+                  "title": "Xero Field Name"
+                }
+              }
+            }
           }
         }
       }

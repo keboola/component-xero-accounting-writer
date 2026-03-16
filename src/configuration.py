@@ -24,12 +24,20 @@ class EntityType(str, Enum):
     bank_transactions = "BankTransactions"
 
 
+class ColumnMapping(BaseModel):
+    """Maps a single source column to a Xero field name."""
+
+    source: str
+    destination: str
+
+
 class EntityConfiguration(BaseModel):
     """Configuration for a single entity to write."""
 
     entity_type: EntityType
     write_mode: WriteMode = WriteMode.upsert
     source_table: str
+    column_mapping: list[ColumnMapping] = Field(default_factory=list)
 
     def __init__(self, **data):
         try:
