@@ -27,6 +27,174 @@ from writers import (
 
 KEY_STATE_OAUTH_TOKEN_DICT = "#oauth_token_dict"
 
+# Required and commonly-used fields for each Xero entity type.
+# Used by the loadFieldSuggestions sync action to pre-fill column_mapping.
+# Fields are ordered: required first, then recommended optional ones.
+ENTITY_FIELD_SUGGESTIONS: dict[str, list[str]] = {
+    "Contacts": [
+        "Name",
+        "FirstName",
+        "LastName",
+        "EmailAddress",
+        "IsSupplier",
+        "IsCustomer",
+        "DefaultCurrency",
+        "ContactNumber",
+        "AccountNumber",
+        "TaxNumber",
+        "Phone_PhoneType",
+        "Phone_PhoneNumber",
+        "Phone_PhoneAreaCode",
+        "Phone_PhoneCountryCode",
+        "Address_AddressType",
+        "Address_AddressLine1",
+        "Address_City",
+        "Address_Region",
+        "Address_PostalCode",
+        "Address_Country",
+    ],
+    "Invoices": [
+        "Type",
+        "Status",
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_Quantity",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "InvoiceID",
+        "InvoiceNumber",
+        "Reference",
+        "CurrencyCode",
+        "DateString",
+        "DueDateString",
+        "LineItem_TaxType",
+        "LineItem_ItemCode",
+    ],
+    "Payments": [
+        "Amount",
+        "Date",
+        "Invoice_InvoiceID",
+        "Invoice_InvoiceNumber",
+        "Account_Code",
+        "PaymentID",
+        "Reference",
+        "Status",
+        "CurrencyRate",
+        "IsReconciled",
+    ],
+    "PurchaseOrders": [
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_Quantity",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "PurchaseOrderID",
+        "PurchaseOrderNumber",
+        "DateString",
+        "DeliveryDateString",
+        "Status",
+        "CurrencyCode",
+        "Reference",
+        "LineItem_TaxType",
+        "LineItem_ItemCode",
+    ],
+    "ManualJournals": [
+        "Narration",
+        "JournalLine_LineAmount",
+        "JournalLine_AccountCode",
+        "ManualJournalID",
+        "DateString",
+        "Status",
+        "JournalLine_Description",
+        "JournalLine_TaxType",
+    ],
+    "Items": [
+        "Code",
+        "Name",
+        "Description",
+        "IsSold",
+        "IsPurchased",
+        "SalesDetails_UnitPrice",
+        "SalesDetails_AccountCode",
+        "SalesDetails_TaxType",
+        "PurchaseDetails_UnitPrice",
+        "PurchaseDetails_AccountCode",
+        "PurchaseDetails_TaxType",
+        "ItemID",
+        "PurchaseDescription",
+    ],
+    "CreditNotes": [
+        "Type",
+        "Status",
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_Quantity",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "CreditNoteID",
+        "CreditNoteNumber",
+        "Reference",
+        "CurrencyCode",
+        "DateString",
+        "LineItem_TaxType",
+        "LineItem_ItemCode",
+    ],
+    "Currencies": [
+        "Code",
+        "Description",
+    ],
+    "Employees": [
+        "FirstName",
+        "LastName",
+        "EmployeeID",
+        "Status",
+    ],
+    "Quotes": [
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_Quantity",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "QuoteID",
+        "QuoteNumber",
+        "Reference",
+        "Status",
+        "CurrencyCode",
+        "DateString",
+        "ExpiryDateString",
+        "Title",
+        "LineItem_TaxType",
+        "LineItem_ItemCode",
+    ],
+    "TrackingCategories": [
+        "Name",
+        "TrackingCategoryID",
+        "Status",
+    ],
+    "BankTransactions": [
+        "Type",
+        "BankAccount_Code",
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "BankTransactionID",
+        "DateString",
+        "Status",
+        "Reference",
+        "CurrencyCode",
+        "LineItem_Quantity",
+        "LineItem_TaxType",
+        "LineItem_ItemCode",
+        "IsReconciled",
+    ],
+}
+
 WRITER_MAP: dict[EntityType, type] = {
     EntityType.contacts: ContactsWriter,
     EntityType.invoices: InvoicesWriter,
@@ -264,6 +432,128 @@ class Component(ComponentBase):
     # ------------------------------------------------------------------ #
     # Sync actions                                                          #
     # ------------------------------------------------------------------ #
+
+    @sync_action("loadFieldSuggestions")
+    def load_field_suggestions(self):
+        """Match input table columns to Xero field names using fuzzy matching.
+
+        For each entity:
+        - Looks up the input table columns via Keboola Storage API (using the source_table
+          destination name to find the table ID in the storage input mapping)
+        - Fuzzy-matches those column names to the known Xero fields for the entity type
+        - Preserves any existing column_mapping entries
+        Falls back to field-name-only suggestions when the table is not found in storage.
+        """
+        params = self.configuration.parameters
+        entities = params.get("entities", [])
+
+        # Build lookup: destination filename → (table_id, pre-selected columns)
+        input_table_map = {t.destination.removesuffix(".csv"): t for t in self.configuration.tables_input_mapping}
+
+        updated_entities = []
+        for entity in entities:
+            entity_type = entity.get("entity_type", "")
+            existing_mapping = entity.get("column_mapping", [])
+            suggestions = ENTITY_FIELD_SUGGESTIONS.get(entity_type, [])
+
+            source_key = entity.get("source_table", "").removesuffix(".csv")
+            table_def = input_table_map.get(source_key)
+
+            if table_def:
+                # Use explicitly selected columns, or fetch all columns from SAPI
+                columns = (
+                    list(table_def.columns)
+                    if table_def.columns
+                    else self._get_table_columns_from_sapi(table_def.source)
+                )
+                new_mapping = self._build_mapped_columns(columns, suggestions, existing_mapping)
+            else:
+                # No input mapping found — fall back to field-name suggestions only
+                logging.warning(
+                    f"[{entity_type}] Input table '{entity.get('source_table')}' not found in "
+                    "storage mapping — falling back to field-name suggestions."
+                )
+                already_mapped = {m["destination"] for m in existing_mapping}
+                new_mapping = existing_mapping + [
+                    {"source": field, "destination": field} for field in suggestions if field not in already_mapped
+                ]
+
+            updated_entities.append({**entity, "column_mapping": new_mapping})
+
+        return {"type": "data", "data": {"entities": updated_entities}}
+
+    def _get_table_columns_from_sapi(self, table_id: str) -> list[str]:
+        """Fetch column names for a Keboola Storage table via the Storage API."""
+        url = self.environment_variables.url
+        token = self.environment_variables.token
+        if not url or not token:
+            logging.warning("Missing KBC environment variables — cannot fetch table columns from SAPI")
+            return []
+        try:
+            response = requests.get(
+                f"{url}/v2/storage/tables/{table_id}",
+                headers={"X-StorageApi-Token": token},
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json().get("columns", [])
+        except Exception as exc:
+            logging.warning(f"Could not fetch columns for table '{table_id}' from SAPI: {exc}")
+            return []
+
+    @staticmethod
+    def _fuzzy_match_field(column: str, xero_fields: list[str]) -> str:
+        """Match a source column name to the best Xero field name, or return empty string."""
+
+        def normalize(s: str) -> str:
+            return s.lower().replace("_", "").replace("-", "").replace(" ", "")
+
+        # 1. Exact match
+        if column in xero_fields:
+            return column
+        # 2. Case-insensitive exact
+        lower_map = {f.lower(): f for f in xero_fields}
+        if column.lower() in lower_map:
+            return lower_map[column.lower()]
+        # 3. Normalized match (strips underscores/hyphens/spaces, lowercased)
+        normalized_map = {normalize(f): f for f in xero_fields}
+        if normalize(column) in normalized_map:
+            return normalized_map[normalize(column)]
+        return ""
+
+    @staticmethod
+    def _build_mapped_columns(
+        columns: list[str],
+        suggestions: list[str],
+        existing_mapping: list[dict],
+    ) -> list[dict]:
+        """Build a merged column_mapping from actual table columns + known Xero fields.
+
+        - All input columns are included; those that fuzzy-match a Xero field get a destination
+        - Existing entries are preserved; new columns not already mapped are appended
+        - Known Xero fields with no matching source column are appended with source = field name
+        """
+        existing_sources = {m["source"] for m in existing_mapping}
+        existing_destinations = {m["destination"] for m in existing_mapping}
+
+        result = list(existing_mapping)
+
+        # Map each input column that isn't already in the mapping
+        matched_destinations: set[str] = set(existing_destinations)
+        for col in columns:
+            if col in existing_sources:
+                continue
+            destination = Component._fuzzy_match_field(col, suggestions)
+            result.append({"source": col, "destination": destination})
+            if destination:
+                matched_destinations.add(destination)
+
+        # Append any required Xero fields that weren't matched from the table
+        for field in suggestions:
+            if field not in matched_destinations:
+                result.append({"source": "", "destination": field})
+
+        return result
 
     @sync_action("listTenants")
     def list_tenants(self):

@@ -93,7 +93,7 @@
           },
           "column_mapping": {
             "title": "Column Mapping",
-            "description": "Map input table columns to Xero field names. If empty, all columns are passed as-is.",
+            "description": "Map input table columns to Xero field names. If empty, all columns are passed as-is. Use 'Load Field Suggestions' to pre-fill required fields for the selected entity type.",
             "type": "array",
             "format": "table",
             "propertyOrder": 40,
@@ -104,12 +104,27 @@
               "properties": {
                 "source": {
                   "type": "string",
-                  "title": "Source Column"
+                  "title": "Source Column",
+                  "enumSource": "columns"
                 },
                 "destination": {
                   "type": "string",
                   "title": "Xero Field Name"
                 }
+              }
+            }
+          },
+          "load_field_suggestions": {
+            "type": "button",
+            "format": "sync-action",
+            "title": "Load Field Suggestions",
+            "description": "Matches input table columns to Xero field names. Requires the input table to be configured in storage mapping.",
+            "propertyOrder": 35,
+            "options": {
+              "async": {
+                "label": "Match Columns",
+                "action": "loadFieldSuggestions",
+                "cache": false
               }
             }
           }
