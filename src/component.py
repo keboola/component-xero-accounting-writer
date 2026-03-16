@@ -468,15 +468,18 @@ class Component(ComponentBase):
                 )
                 new_mapping = self._build_mapped_columns(columns, suggestions, existing_mapping)
             else:
-                # No input mapping found — fall back to field-name suggestions only
+                # No input mapping found — fall back to Xero field list with empty sources
                 logging.warning(
                     f"[{entity_type}] Input table '{entity.get('source_table')}' not found in "
                     "storage mapping — falling back to field-name suggestions."
                 )
-                already_mapped = {m["destination"] for m in existing_mapping}
-                new_mapping = existing_mapping + [
-                    {"source": field, "destination": field} for field in suggestions if field not in already_mapped
-                ]
+                existing_by_dest = {m["destination"]: m for m in existing_mapping}
+                new_mapping = []
+                for field in suggestions:
+                    if field in existing_by_dest:
+                        new_mapping.append(existing_by_dest[field])
+                    else:
+                        new_mapping.append({"source": "", "destination": field})
 
             updated_entities.append({**entity, "column_mapping": new_mapping})
 
@@ -527,31 +530,30 @@ class Component(ComponentBase):
         suggestions: list[str],
         existing_mapping: list[dict],
     ) -> list[dict]:
-        """Build a merged column_mapping from actual table columns + known Xero fields.
+        """Build column_mapping anchored on the Xero field list.
 
-        - All input columns are included; those that fuzzy-match a Xero field get a destination
-        - Existing entries are preserved; new columns not already mapped are appended
-        - Known Xero fields with no matching source column are appended with source = field name
+        For each known Xero field, find the best matching source column via fuzzy matching.
+        The result is always ordered by the Xero field list so the destination column is stable.
+        Existing entries (keyed by destination) are preserved as-is.
         """
-        existing_sources = {m["source"] for m in existing_mapping}
-        existing_destinations = {m["destination"] for m in existing_mapping}
+        existing_by_dest = {m["destination"]: m for m in existing_mapping}
+        used_sources = {m["source"] for m in existing_mapping if m["source"]}
 
-        result = list(existing_mapping)
-
-        # Map each input column that isn't already in the mapping
-        matched_destinations: set[str] = set(existing_destinations)
+        # Build mapping: Xero field → first matching source column
+        field_to_source: dict[str, str] = {}
         for col in columns:
-            if col in existing_sources:
+            if col in used_sources:
                 continue
-            destination = Component._fuzzy_match_field(col, suggestions)
-            result.append({"source": col, "destination": destination})
-            if destination:
-                matched_destinations.add(destination)
+            matched_field = Component._fuzzy_match_field(col, suggestions)
+            if matched_field and matched_field not in field_to_source:
+                field_to_source[matched_field] = col
 
-        # Append any required Xero fields that weren't matched from the table
+        result = []
         for field in suggestions:
-            if field not in matched_destinations:
-                result.append({"source": "", "destination": field})
+            if field in existing_by_dest:
+                result.append(existing_by_dest[field])
+            else:
+                result.append({"source": field_to_source.get(field, ""), "destination": field})
 
         return result
 

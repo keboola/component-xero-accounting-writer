@@ -93,23 +93,32 @@
           },
           "column_mapping": {
             "title": "Column Mapping",
-            "description": "Map input table columns to Xero field names. If empty, all columns are passed as-is. Use 'Load Field Suggestions' to pre-fill required fields for the selected entity type.",
+            "description": "Maps Xero field names to your input table columns. Click **Match Columns** to auto-fill.",
             "type": "array",
             "format": "table",
             "propertyOrder": 40,
+            "options": {
+              "tooltip": "Maps **Xero field names** to your input table columns.\n\nClick **Match Columns** to auto-fill based on your input table columns.\n\n**Xero Field Name** (left column) is pre-loaded from the known field list for the selected entity type and cannot be edited.\n\nNested Xero objects are flattened with underscore notation — e.g. `Address_City` represents the `city` field inside the `addresses` object. See the [Xero API documentation](https://developer.xero.com/documentation/api/accounting/overview) for field definitions.\n\nNon-essential fields with no matching source column can be deleted."
+            },
             "items": {
               "type": "object",
               "required": ["source", "destination"],
               "title": "Column",
               "properties": {
+                "destination": {
+                  "type": "string",
+                  "title": "Xero Field Name",
+                  "readOnly": true,
+                  "propertyOrder": 10
+                },
                 "source": {
                   "type": "string",
                   "title": "Source Column",
-                  "enumSource": "columns"
-                },
-                "destination": {
-                  "type": "string",
-                  "title": "Xero Field Name"
+                  "enumSource": "columns",
+                  "propertyOrder": 20,
+                  "options": {
+                    "creatable": true
+                  }
                 }
               }
             }
