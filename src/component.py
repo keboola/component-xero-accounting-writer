@@ -538,8 +538,7 @@ class Component(ComponentBase):
                     if field in existing_by_dest:
                         new_mapping.append(existing_by_dest[field])
                     else:
-                        status = "required" if field in required_fields else "optional"
-                        new_mapping.append({"source": "", "destination": field, "required": status})
+                        new_mapping.append({"source": "", "destination": field, "required": field in required_fields})
 
             updated_entities.append({**entity, "column_mapping": new_mapping})
 
@@ -614,8 +613,13 @@ class Component(ComponentBase):
             if field in existing_by_dest:
                 result.append(existing_by_dest[field])
             else:
-                status = "required" if field in required_fields else "optional"
-                result.append({"source": field_to_source.get(field, ""), "destination": field, "required": status})
+                result.append(
+                    {
+                        "source": field_to_source.get(field, ""),
+                        "destination": field,
+                        "required": field in required_fields,
+                    }
+                )
 
         return result
 

@@ -1,15 +1,15 @@
-from enum import Enum
+from enum import StrEnum
 
 from keboola.component.exceptions import UserException
 from pydantic import BaseModel, Field, ValidationError
 
 
-class WriteMode(str, Enum):
+class WriteMode(StrEnum):
     create = "create"
     upsert = "upsert"
 
 
-class EntityType(str, Enum):
+class EntityType(StrEnum):
     contacts = "Contacts"
     invoices = "Invoices"
     payments = "Payments"
@@ -29,7 +29,7 @@ class ColumnMapping(BaseModel):
 
     source: str
     destination: str
-    required: str | None = Field(default=None)
+    required: bool | None = Field(default=None)
 
 
 class EntityConfiguration(BaseModel):

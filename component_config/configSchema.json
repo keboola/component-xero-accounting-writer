@@ -136,9 +136,9 @@
                   "propertyOrder": 20
                 },
                 "required": {
-                  "type": "string",
+                  "type": "boolean",
                   "title": "Required",
-                  "enum": ["required", "optional"],
+                  "format": "checkbox",
                   "propertyOrder": 30
                 }
               }
