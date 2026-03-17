@@ -195,6 +195,57 @@ ENTITY_FIELD_SUGGESTIONS: dict[str, list[str]] = {
     ],
 }
 
+# Required fields per entity type, based on Xero API documentation.
+# https://developer.xero.com/documentation/api/accounting/overview
+# For either/or requirements (e.g. ContactID or Name), both are marked required
+# so the user knows at least one must be provided.
+ENTITY_FIELD_REQUIRED: dict[str, set[str]] = {
+    "Contacts": {"Name"},
+    "Invoices": {
+        "Type",
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+        "DateString",
+    },
+    "Payments": {"Amount", "Date", "Invoice_InvoiceID", "Invoice_InvoiceNumber", "Account_Code"},
+    "PurchaseOrders": {
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+    },
+    "ManualJournals": {"Narration", "JournalLine_LineAmount", "JournalLine_AccountCode"},
+    "Items": {"Code"},
+    "CreditNotes": {
+        "Type",
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+    },
+    "Currencies": {"Code"},
+    "Employees": {"FirstName", "LastName"},
+    "Quotes": {
+        "Contact_ContactID",
+        "Contact_Name",
+        "LineItem_Description",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+    },
+    "TrackingCategories": {"Name"},
+    "BankTransactions": {
+        "Type",
+        "BankAccount_Code",
+        "LineItem_UnitAmount",
+        "LineItem_AccountCode",
+    },
+}
+
 WRITER_MAP: dict[EntityType, type] = {
     EntityType.contacts: ContactsWriter,
     EntityType.invoices: InvoicesWriter,
@@ -472,20 +523,23 @@ class Component(ComponentBase):
                     if table_def.columns
                     else self._get_table_columns_from_sapi(table_def.source)
                 )
-                new_mapping = self._build_mapped_columns(columns, suggestions, existing_mapping)
+                required_fields = ENTITY_FIELD_REQUIRED.get(entity_type, set())
+                new_mapping = self._build_mapped_columns(columns, suggestions, existing_mapping, required_fields)
             else:
                 # No input mapping found — fall back to Xero field list with empty sources
                 logging.warning(
                     f"[{entity_type}] Input table '{entity.get('source_table')}' not found in "
                     "storage mapping — falling back to field-name suggestions."
                 )
+                required_fields = ENTITY_FIELD_REQUIRED.get(entity_type, set())
                 existing_by_dest = {m["destination"]: m for m in existing_mapping}
                 new_mapping = []
                 for field in suggestions:
                     if field in existing_by_dest:
                         new_mapping.append(existing_by_dest[field])
                     else:
-                        new_mapping.append({"source": "", "destination": field})
+                        status = "required" if field in required_fields else "optional"
+                        new_mapping.append({"source": "", "destination": field, "required": status})
 
             updated_entities.append({**entity, "column_mapping": new_mapping})
 
@@ -535,6 +589,7 @@ class Component(ComponentBase):
         columns: list[str],
         suggestions: list[str],
         existing_mapping: list[dict],
+        required_fields: set[str],
     ) -> list[dict]:
         """Build column_mapping anchored on the Xero field list.
 
@@ -559,7 +614,8 @@ class Component(ComponentBase):
             if field in existing_by_dest:
                 result.append(existing_by_dest[field])
             else:
-                result.append({"source": field_to_source.get(field, ""), "destination": field})
+                status = "required" if field in required_fields else "optional"
+                result.append({"source": field_to_source.get(field, ""), "destination": field, "required": status})
 
         return result
 

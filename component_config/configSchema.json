@@ -18,7 +18,8 @@
     },
     "skip_validation_errors": {
       "type": "boolean",
-      "title": "Skip Validation Errors",
+      "title": "Continue on Error",
+      "format": "checkbox",
       "description": "When enabled, records that fail Xero validation are skipped with a warning. When disabled (default), the job fails if any record has validation errors.",
       "default": false,
       "propertyOrder": 15
@@ -26,21 +27,36 @@
     "create_errors_table": {
       "type": "boolean",
       "title": "Create Errors Table",
+      "format": "checkbox",
       "description": "When enabled, records that fail Xero validation are written to an output table 'validation_errors' with columns: entity_type, record_id, errors.",
       "default": false,
       "propertyOrder": 16
     },
+    "reload_all_mappings": {
+      "type": "button",
+      "format": "sync-action",
+      "title": "Reload All Mappings",
+      "description": "Auto-match columns for all configured endpoints based on their input tables.",
+      "propertyOrder": 19,
+      "options": {
+        "async": {
+          "label": "Reload All Mappings",
+          "action": "loadFieldSuggestions",
+          "cache": false
+        }
+      }
+    },
     "entities": {
-      "title": "Entities to Write",
+      "title": "Endpoints to Write",
       "type": "array",
       "propertyOrder": 20,
       "items": {
         "type": "object",
         "required": ["entity_type", "write_mode", "source_table"],
-        "title": "Entity",
+        "title": "Endpoint",
         "properties": {
           "entity_type": {
-            "title": "Entity Type",
+            "title": "Endpoint Type",
             "type": "string",
             "enum": [
               "Contacts",
@@ -93,47 +109,38 @@
           },
           "column_mapping": {
             "title": "Column Mapping",
-            "description": "Maps Xero field names to your input table columns. Click **Match Columns** to auto-fill.",
+            "description": "Maps your input table columns to Xero field names. Click Reload All Mappings to auto-fill.",
             "type": "array",
             "format": "table",
             "propertyOrder": 40,
             "options": {
-              "tooltip": "Maps **Xero field names** to your input table columns.\n\nClick **Match Columns** to auto-fill based on your input table columns.\n\n**Xero Field Name** (left column) is pre-loaded from the known field list for the selected entity type and cannot be edited.\n\nNested Xero objects are flattened with underscore notation — e.g. `Address_City` represents the `city` field inside the `addresses` object. See the [Xero API documentation](https://developer.xero.com/documentation/api/accounting/overview) for field definitions.\n\nNon-essential fields with no matching source column can be deleted."
+              "tooltip": "Maps your **Source Column** to the target **Xero Field Name**.\n\nClick **Reload All Mappings** (above the endpoints list) to auto-fill based on your input table columns.\n\nNested Xero objects are flattened with underscore notation — e.g. `Address_City` represents the `city` field inside the `addresses` object. See the [Xero API documentation](https://developer.xero.com/documentation/api/accounting/overview) for field definitions.\n\nNon-essential fields with no matching source column can be deleted."
             },
             "items": {
               "type": "object",
               "required": ["source", "destination"],
               "title": "Column",
               "properties": {
-                "destination": {
-                  "type": "string",
-                  "title": "Xero Field Name",
-                  "readOnly": true,
-                  "propertyOrder": 10
-                },
                 "source": {
                   "type": "string",
                   "title": "Source Column",
                   "enumSource": "columns",
-                  "propertyOrder": 20,
+                  "propertyOrder": 10,
                   "options": {
                     "creatable": true
                   }
+                },
+                "destination": {
+                  "type": "string",
+                  "title": "Xero Field Name",
+                  "propertyOrder": 20
+                },
+                "required": {
+                  "type": "string",
+                  "title": "Required",
+                  "enum": ["required", "optional"],
+                  "propertyOrder": 30
                 }
-              }
-            }
-          },
-          "load_field_suggestions": {
-            "type": "button",
-            "format": "sync-action",
-            "title": "Load Field Suggestions",
-            "description": "Matches input table columns to Xero field names. Requires the input table to be configured in storage mapping.",
-            "propertyOrder": 35,
-            "options": {
-              "async": {
-                "label": "Match Columns",
-                "action": "loadFieldSuggestions",
-                "cache": false
               }
             }
           }

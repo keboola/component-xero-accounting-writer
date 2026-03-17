@@ -29,6 +29,7 @@ class ColumnMapping(BaseModel):
 
     source: str
     destination: str
+    required: str | None = Field(default=None)
 
 
 class EntityConfiguration(BaseModel):
