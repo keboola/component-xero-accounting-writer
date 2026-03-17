@@ -46,7 +46,9 @@ class ItemsWriter(BaseWriter):
             raise UserException(f"Failed to write items batch: {exc}") from exc
 
     def _row_to_item(self, row: dict[str, Any]) -> Item:
-        code = self._get(row, "Code") or ""
+        code = self._get(row, "Code")
+        if not code:
+            raise UserException(f"Row is missing required field 'Code': {row}")
         item = Item(code=code)
 
         if v := self._get(row, "ItemID"):

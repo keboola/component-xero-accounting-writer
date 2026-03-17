@@ -3,21 +3,21 @@ repos:
     hooks:
       - id: ruff-check
         name: ruff check
-        entry: .venv/bin/ruff check src/ tests/
+        entry: uv run ruff check src/ tests/
         language: system
         pass_filenames: false
         always_run: true
 
       - id: ruff-format
         name: ruff format
-        entry: .venv/bin/ruff format --check src/ tests/
+        entry: uv run ruff format --check src/ tests/
         language: system
         pass_filenames: false
         always_run: true
 
       - id: pytest
         name: pytest
-        entry: .venv/bin/pytest tests/ -v
+        entry: uv run pytest tests/ -v
         language: system
         pass_filenames: false
         always_run: true

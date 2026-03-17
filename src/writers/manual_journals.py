@@ -47,7 +47,9 @@ class ManualJournalsWriter(BaseWriter):
             raise UserException(f"Failed to write manual journals batch: {exc}") from exc
 
     def _row_to_journal(self, row: dict[str, Any]) -> ManualJournal:
-        narration = self._get(row, "Narration") or ""
+        narration = self._get(row, "Narration")
+        if not narration:
+            raise UserException(f"Row is missing required field 'Narration': {row}")
         journal = ManualJournal(narration=narration)
 
         if v := self._get(row, "ManualJournalID"):
