@@ -6,13 +6,8 @@ requires-python = "~=3.13.0"
 dependencies = [
     "freezegun~=1.5.1",
     "keboola.component>=1.9.0",
-    "keboola-http-client>=1.0.1",
-    "keboola-utils>=1.1.0",
-    "mock~=5.1.0",
     "pydantic~=2.0",
     "xero-python~=4.0.0",
-    "dateparser~=1.2.0",
-    "regex>=2022.03.02",
     "tenacity~=9.0.0",
     "ratelimit>=2.2.1",
     "urllib3~=2.2.3",
