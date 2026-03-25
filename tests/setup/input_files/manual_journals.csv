@@ -1,0 +1,5 @@
+ManualJournalID,Narration,DateString,Status,ShowOnCashBasisReports,JournalLine_Description,JournalLine_LineAmount,JournalLine_AccountCode,JournalLine_TaxType
+11112222-aaaa-bbbb-cccc-333344445555,Accrual adjustment Jan 2025,2025-01-31,DRAFT,false,Accrued revenue recognition,1200.00,200,NONE
+22223333-aaaa-bbbb-cccc-333344445555,Depreciation Q1 2025,2025-03-31,DRAFT,false,Equipment depreciation charge,-350.00,720,NONE
+33334444-aaaa-bbbb-cccc-333344445555,Prepayment amortisation Feb 2025,2025-02-28,DRAFT,true,Prepaid insurance amortisation,-250.00,400,NONE
+44445555-aaaa-bbbb-cccc-333344445555,Intercompany loan interest Mar 2025,2025-03-31,DRAFT,false,Interest on intercompany balance,875.50,430,NONE

@@ -1,0 +1,6 @@
+ContactID,ContactNumber,Name,FirstName,LastName,EmailAddress,IsSupplier,IsCustomer,DefaultCurrency,TaxNumber,AccountNumber,BankAccountDetails,Phone_PhoneType,Phone_PhoneNumber,Phone_PhoneAreaCode,Phone_PhoneCountryCode,Address_AddressType,Address_AddressLine1,Address_City,Address_Region,Address_PostalCode,Address_Country
+aaaaaaaa-1111-cccc-dddd-eeeeeeeeeeee,C001,Acme Supplies Ltd,Alice,Smith,alice@acmesupplies.example,false,true,USD,US123456789,ACC-001,,DEFAULT,555-0101,212,1,STREET,42 Oak Avenue,New York,NY,10001,US
+bbbbbbbb-2222-cccc-dddd-eeeeeeeeeeee,C002,Borealis Imports,Bob,Jones,bob@borealis.example,true,false,EUR,SE987654321,ACC-002,,DEFAULT,555-0202,46,46,POBOX,,Stockholm,,11122,SE
+cccccccc-3333-cccc-dddd-eeeeeeeeeeee,C003,Crestwood Partners,Carol,Williams,carol@crestwood.example,true,true,GBP,GB111222333,ACC-003,,DEFAULT,555-0303,44,44,STREET,15 Bishopsgate,London,,EC2N 3AR,GB
+dddddddd-4444-cccc-dddd-eeeeeeeeeeee,C004,Delta Ventures,David,Brown,david@deltaventures.example,false,true,AUD,AU444555666,ACC-004,,MOBILE,0412-345-678,61,61,STREET,88 Collins Street,Melbourne,VIC,3000,AU
+eeeeeeee-5555-cccc-dddd-eeeeeeeeeeee,C005,Eurotrade GmbH,Eva,Müller,eva@eurotrade.example,true,true,EUR,DE777888999,ACC-005,,DEFAULT,030-55501234,49,49,STREET,Unter den Linden 5,Berlin,,10117,DE

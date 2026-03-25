@@ -3,10 +3,149 @@
   "title": "Xero Accounting Writer",
   "properties": {
     "tenant_id": {
-      "title": "Tenant ID",
-      "description": "Xero organisation (tenant) ID to write data to. Leave blank to use the first available tenant.",
       "type": "string",
-      "propertyOrder": 10
+      "title": "Tenant ID",
+      "format": "select",
+      "enum": [],
+      "description": "Xero organisation ID. Leave blank to use the first available tenant.",
+      "propertyOrder": 10,
+      "options": {
+        "async": {
+          "label": "Re-load tenants",
+          "action": "listTenants"
+        }
+      }
+    },
+    "skip_validation_errors": {
+      "type": "boolean",
+      "title": "Continue on Error",
+      "format": "checkbox",
+      "description": "When enabled, records that fail Xero validation are skipped with a warning. When disabled (default), the job fails if any record has validation errors.",
+      "default": false,
+      "propertyOrder": 15
+    },
+    "create_errors_table": {
+      "type": "boolean",
+      "title": "Create Errors Table",
+      "format": "checkbox",
+      "description": "When enabled, records that fail Xero validation are written to an output table 'validation_errors' with columns: entity_type, record_id, errors.",
+      "default": false,
+      "propertyOrder": 16
+    },
+    "reload_all_mappings": {
+      "type": "button",
+      "format": "sync-action",
+      "title": "Reload All Mappings",
+      "description": "Auto-match columns for all configured endpoints based on their input tables.",
+      "propertyOrder": 19,
+      "options": {
+        "async": {
+          "label": "Reload All Mappings",
+          "action": "loadFieldSuggestions",
+          "cache": false
+        }
+      }
+    },
+    "entities": {
+      "title": "Endpoints to Write",
+      "type": "array",
+      "propertyOrder": 20,
+      "items": {
+        "type": "object",
+        "required": ["entity_type", "write_mode", "source_table"],
+        "title": "Endpoint",
+        "properties": {
+          "entity_type": {
+            "title": "Endpoint Type",
+            "type": "string",
+            "enum": [
+              "Contacts",
+              "Invoices",
+              "Payments",
+              "PurchaseOrders",
+              "ManualJournals",
+              "Items",
+              "CreditNotes",
+              "Currencies",
+              "Employees",
+              "Quotes",
+              "TrackingCategories",
+              "BankTransactions"
+            ],
+            "options": {
+              "enum_titles": [
+                "Contacts",
+                "Invoices",
+                "Payments",
+                "Purchase Orders",
+                "Manual Journals",
+                "Items",
+                "Credit Notes",
+                "Currencies",
+                "Employees",
+                "Quotes",
+                "Tracking Categories",
+                "Bank Transactions"
+              ]
+            },
+            "propertyOrder": 10
+          },
+          "write_mode": {
+            "title": "Write Mode",
+            "description": "Create: add new records only. Upsert: create or update by Xero ID or reference.",
+            "type": "string",
+            "enum": ["create", "upsert"],
+            "options": {
+              "enum_titles": ["Create (POST)", "Upsert (POST + PUT)"]
+            },
+            "default": "upsert",
+            "propertyOrder": 20
+          },
+          "source_table": {
+            "title": "Input Table Name",
+            "description": "The destination name of the input table as configured in storage mapping.",
+            "type": "string",
+            "propertyOrder": 30
+          },
+          "column_mapping": {
+            "title": "Column Mapping",
+            "description": "Maps your input table columns to Xero field names. Click Reload All Mappings to auto-fill.",
+            "type": "array",
+            "format": "table",
+            "propertyOrder": 40,
+            "options": {
+              "tooltip": "Maps your **Source Column** to the target **Xero Field Name**.\n\nClick **Reload All Mappings** (above the endpoints list) to auto-fill based on your input table columns.\n\nNested Xero objects are flattened with underscore notation — e.g. `Address_City` represents the `city` field inside the `addresses` object. See the [Xero API documentation](https://developer.xero.com/documentation/api/accounting/overview) for field definitions.\n\nNon-essential fields with no matching source column can be deleted."
+            },
+            "items": {
+              "type": "object",
+              "required": ["source", "destination"],
+              "title": "Column",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "title": "Source Column",
+                  "enumSource": "columns",
+                  "propertyOrder": 10,
+                  "options": {
+                    "creatable": true
+                  }
+                },
+                "destination": {
+                  "type": "string",
+                  "title": "Xero Field Name",
+                  "propertyOrder": 20
+                },
+                "required": {
+                  "type": "boolean",
+                  "title": "Required",
+                  "format": "checkbox",
+                  "propertyOrder": 30
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

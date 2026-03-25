@@ -1,0 +1,6 @@
+ItemID,Code,Name,Description,PurchaseDescription,IsSold,IsPurchased,SalesDetails_UnitPrice,SalesDetails_AccountCode,SalesDetails_TaxType,PurchaseDetails_UnitPrice,PurchaseDetails_AccountCode,PurchaseDetails_TaxType
+,CONSULT-HR,HR Consulting Hour,One hour of HR consulting services,HR consulting (purchase),true,false,175.00,200,NONE,,,
+,SW-LIC-ANNUAL,Annual Software Licence,12-month software licence key,Annual software licence (purchase),true,true,299.00,410,NONE,210.00,400,NONE
+,OFFICE-CHAIR,Ergonomic Office Chair,Adjustable lumbar support office chair,Office chair for resale,true,true,449.00,200,NONE,280.00,400,NONE
+,SHIPPING-STD,Standard Shipping,Standard domestic shipping fee,Shipping cost (purchase),true,true,15.00,410,NONE,8.00,400,NONE
+,TRAINING-DAY,Training Day,Full-day on-site training session,,true,false,1200.00,200,NONE,,,

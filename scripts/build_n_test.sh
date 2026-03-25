@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 
-flake8 --config=flake8.cfg
+ruff check src/ tests/
 python -m pytest tests/ -v

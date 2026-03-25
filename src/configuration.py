@@ -1,16 +1,15 @@
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from keboola.component.exceptions import UserException
 from pydantic import BaseModel, Field, ValidationError
 
 
-class WriteMode(str, Enum):
+class WriteMode(StrEnum):
     create = "create"
     upsert = "upsert"
 
 
-class EntityType(str, Enum):
+class EntityType(StrEnum):
     contacts = "Contacts"
     invoices = "Invoices"
     payments = "Payments"
@@ -25,10 +24,37 @@ class EntityType(str, Enum):
     bank_transactions = "BankTransactions"
 
 
-class RootConfiguration(BaseModel):
-    """Root-level configuration (shared across all rows)."""
+class ColumnMapping(BaseModel):
+    """Maps a single source column to a Xero field name."""
 
-    tenant_id: Optional[str] = Field(default=None)
+    source: str
+    destination: str
+    required: bool | None = Field(default=None)
+
+
+class EntityConfiguration(BaseModel):
+    """Configuration for a single entity to write."""
+
+    entity_type: EntityType
+    write_mode: WriteMode = WriteMode.upsert
+    source_table: str
+    column_mapping: list[ColumnMapping] = Field(default_factory=list)
+
+    def __init__(self, **data):
+        try:
+            super().__init__(**data)
+        except ValidationError as e:
+            error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
+            raise UserException(f"Entity configuration validation error: {', '.join(error_messages)}") from e
+
+
+class RootConfiguration(BaseModel):
+    """Root-level configuration."""
+
+    tenant_id: str | None = Field(default=None)
+    skip_validation_errors: bool = Field(default=False)
+    create_errors_table: bool = Field(default=False)
+    entities: list[EntityConfiguration] = Field(default_factory=list)
 
     def __init__(self, **data):
         try:
@@ -36,17 +62,3 @@ class RootConfiguration(BaseModel):
         except ValidationError as e:
             error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
             raise UserException(f"Configuration validation error: {', '.join(error_messages)}") from e
-
-
-class RowConfiguration(BaseModel):
-    """Per-row configuration (one entity type to write)."""
-
-    entity_type: EntityType
-    write_mode: WriteMode = WriteMode.upsert
-
-    def __init__(self, **data):
-        try:
-            super().__init__(**data)
-        except ValidationError as e:
-            error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in e.errors()]
-            raise UserException(f"Row configuration validation error: {', '.join(error_messages)}") from e

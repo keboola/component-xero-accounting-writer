@@ -1,3 +1,0 @@
-ContactNumber,Name,EmailAddress,IsSupplier,IsCustomer
-C001,Acme Corp,acme@example.com,false,true
-C002,Bob Supplier,bob@supplier.com,true,false

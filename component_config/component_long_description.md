@@ -1,35 +1,27 @@
-# Xero Accounting Writer
+The Xero Accounting Writer enables seamless synchronisation of data from Keboola Storage into [Xero](https://www.xero.com/), a cloud-based accounting platform trusted by millions of businesses worldwide. Whether you are automating the creation of invoices, syncing supplier contacts from a CRM, importing payroll employees, or pushing journal entries from an external system, this component provides a unified, configuration-driven way to write accounting data to Xero without custom code.
 
-Write data from Keboola Connection Storage back to [Xero Accounting](https://www.xero.com/) via the Xero API.
+All entity types are processed in a single component run using one OAuth session, eliminating token conflicts when writing multiple tables. Each entity is configured with its own source table and write mode, giving you precise control over which data flows to Xero and how.
 
-## Supported entities
+**Supported entity types:**
 
-| Entity | Create | Upsert |
-|--------|--------|--------|
-| Contacts | ✓ | ✓ |
-| Invoices | ✓ | ✓ |
-| Payments | ✓ | ✓ |
-| Purchase Orders | ✓ | ✓ |
-| Manual Journals | ✓ | ✓ |
-| Items | ✓ | ✓ |
-| Credit Notes | ✓ | ✓ |
-| Currencies | ✓ | — |
-| Employees | ✓ | ✓ |
-| Quotes | ✓ | ✓ |
-| Tracking Categories | ✓ | ✓ |
-| Bank Transactions | ✓ | ✓ |
+- **Contacts** — Suppliers and customers with addresses and phone numbers
+- **Invoices** — Accounts receivable and payable invoices with line items
+- **Payments** — Invoice payment records linked to bank accounts
+- **Purchase Orders** — Supplier purchase orders with line items and delivery details
+- **Manual Journals** — Custom journal entries for bookkeeping adjustments
+- **Items** — Product and service catalogue with sales and purchase pricing
+- **Credit Notes** — Credit notes for receivable and payable accounts
+- **Currencies** — Organisation currency configuration
+- **Employees** — Basic employee records for payroll integration
+- **Quotes** — Sales quotes with expiry dates and line items
+- **Tracking Categories** — Custom tracking dimensions for reporting
+- **Bank Transactions** — Spend and receive money transactions
 
-## Write modes
+**Key features:**
 
-- **Create** — POST new records; fails if the record already exists.
-- **Upsert** — POST or PUT; creates new records or updates existing ones using Xero's native ID or reference number (e.g. `ContactNumber`, `InvoiceNumber`).
-
-## Authentication
-
-Uses Xero OAuth 2.0. Authorize once via the Keboola OAuth proxy; tokens are automatically refreshed.
-
-## Notes
-
-- Budget writes are **not supported** by the Xero API (`/Budgets` is read-only).
-- Rate limit: 50 requests per 60 seconds (handled automatically).
-- Records are sent in batches of up to 100 per API call.
+- **Upsert and create modes** — Upsert creates new records or updates existing ones by Xero ID or natural key; create mode adds new records only
+- **Single OAuth session** — All entities are written in one execution, avoiding multiple token refresh cycles
+- **Multi-tenant support** — Specify a Tenant ID explicitly or let the component auto-select the first available Xero organisation
+- **Flat CSV input** — Each entity maps from a flat CSV table using named columns; empty cells are safely ignored
+- **Batch processing** — Records are submitted in batches with per-record validation error reporting
+- **Automatic token refresh** — The OAuth token is refreshed at startup and the new token is persisted to component state for subsequent runs

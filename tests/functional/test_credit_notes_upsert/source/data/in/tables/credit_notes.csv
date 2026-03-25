@@ -1,0 +1,5 @@
+CreditNoteID,CreditNoteNumber,Type,Status,Reference,CurrencyCode,DateString,Contact_ContactID,Contact_Name,LineItem_Description,LineItem_Quantity,LineItem_UnitAmount,LineItem_AccountCode,LineItem_TaxType,LineItem_ItemCode
+,CN-2025-001,ACCRECCREDIT,DRAFT,REF-CN-001,USD,2025-02-01,aaaaaaaa-1111-cccc-dddd-eeeeeeeeeeee,Acme Supplies Ltd,Consulting services reversal,2,150.00,200,NONE,CONSULT-HR
+,CN-2025-002,ACCPAYCREDIT,DRAFT,REF-CN-002,USD,2025-02-05,bbbbbbbb-2222-cccc-dddd-eeeeeeeeeeee,Borealis Imports,Software licence partial credit,1,500.00,410,NONE,SW-LIC-ANNUAL
+,CN-2025-003,ACCRECCREDIT,DRAFT,,USD,2025-02-10,cccccccc-3333-cccc-dddd-eeeeeeeeeeee,Crestwood Partners,Returned office supplies,1,45.50,430,NONE,
+,CN-2025-004,ACCRECCREDIT,DRAFT,REF-CN-004,USD,2025-02-15,dddddddd-4444-cccc-dddd-eeeeeeeeeeee,Delta Ventures,Project credit adjustment,1,350.00,200,NONE,
