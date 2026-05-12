@@ -10,7 +10,7 @@ dependencies = [
     "xero-python~=4.0.0",
     "tenacity~=9.0.0",
     "ratelimit>=2.2.1",
-    "urllib3~=2.2.3",
+    "urllib3~=2.7.0",
 ]
 
 [dependency-groups]
