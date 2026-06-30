@@ -1,0 +1,6 @@
+BankTransactionID,Type,Status,Reference,CurrencyCode,DateString,IsReconciled,Contact_ContactID,Contact_Name,BankAccount_AccountID,BankAccount_Code,LineItem_Description,LineItem_Quantity,LineItem_UnitAmount,LineItem_AccountCode,LineItem_TaxType
+,SPEND,AUTHORISED,BT-REF-001,USD,2025-02-01,false,aaaaaaaa-1111-cccc-dddd-eeeeeeeeeeee,Acme Supplies Ltd,,090,Office supply purchase,1,250.00,400,NONE
+,RECEIVE,AUTHORISED,BT-REF-002,USD,2025-02-03,false,bbbbbbbb-2222-cccc-dddd-eeeeeeeeeeee,Borealis Imports,,090,Customer payment received,1,1500.00,200,NONE
+,SPEND,AUTHORISED,BT-REF-003,USD,2025-02-05,true,cccccccc-3333-cccc-dddd-eeeeeeeeeeee,Crestwood Partners,,090,Subscription renewal payment,1,89.00,410,NONE
+,SPEND,AUTHORISED,BT-REF-004,USD,2025-02-10,false,dddddddd-4444-cccc-dddd-eeeeeeeeeeee,Delta Ventures,,090,Travel and accommodation,1,435.00,430,NONE
+,RECEIVE,AUTHORISED,BT-REF-005,USD,2025-02-12,false,eeeeeeee-5555-cccc-dddd-eeeeeeeeeeee,Eurotrade GmbH,,090,Sales revenue receipt,1,2245.00,200,NONE

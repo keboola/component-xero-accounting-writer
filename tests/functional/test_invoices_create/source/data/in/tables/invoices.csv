@@ -1,0 +1,6 @@
+InvoiceID,InvoiceNumber,Type,Status,Reference,CurrencyCode,DateString,DueDateString,Contact_ContactID,Contact_Name,LineItem_Description,LineItem_Quantity,LineItem_UnitAmount,LineItem_AccountCode,LineItem_TaxType,LineItem_ItemCode
+11111111-aaaa-bbbb-cccc-dddddddddddd,INV-2025-001,ACCREC,DRAFT,PO-9001,USD,2025-01-15,2025-02-15,aaaaaaaa-1111-cccc-dddd-eeeeeeeeeeee,Acme Supplies Ltd,Consulting services Q1,10,150.00,200,NONE,CONSULT-HR
+22222222-aaaa-bbbb-cccc-dddddddddddd,INV-2025-002,ACCREC,DRAFT,PO-9002,EUR,2025-01-20,2025-02-20,bbbbbbbb-2222-cccc-dddd-eeeeeeeeeeee,Borealis Imports,Annual software licence,1,2500.00,410,NONE,SW-LIC-ANNUAL
+33333333-aaaa-bbbb-cccc-dddddddddddd,INV-2025-003,ACCPAY,DRAFT,,GBP,2025-01-25,2025-02-25,cccccccc-3333-cccc-dddd-eeeeeeeeeeee,Crestwood Partners,Office supplies delivery,3,45.50,430,NONE,
+44444444-aaaa-bbbb-cccc-dddddddddddd,INV-2025-004,ACCREC,SUBMITTED,REF-2025-004,AUD,2025-02-01,2025-03-01,dddddddd-4444-cccc-dddd-eeeeeeeeeeee,Delta Ventures,Project management retainer,1,3500.00,200,NONE,
+55555555-aaaa-bbbb-cccc-dddddddddddd,INV-2025-005,ACCREC,DRAFT,REF-2025-005,EUR,2025-02-05,2025-03-05,eeeeeeee-5555-cccc-dddd-eeeeeeeeeeee,Eurotrade GmbH,Ergonomic office chairs x5,5,449.00,200,NONE,OFFICE-CHAIR

@@ -1,0 +1,23 @@
+{
+  "files": {},
+  "hash_algorithm": "sha256",
+  "tables": {
+    "validation_errors.csv": {
+      "columns": [
+        "entity_type",
+        "record_id",
+        "errors"
+      ],
+      "hash": "sha256:4fd9f29a5bc2bef0069d3be29a69be82f2382c6dbb182fafdf7a401311169695",
+      "row_count": 3,
+      "size_bytes": 342
+    },
+    "validation_errors.csv.manifest": {
+      "columns": null,
+      "hash": "sha256:211276011add90e9feb7db8e31583a2437c5e1d23d3dde6950fd841eb435cebd",
+      "row_count": null,
+      "size_bytes": 212
+    }
+  },
+  "version": "1.0"
+}

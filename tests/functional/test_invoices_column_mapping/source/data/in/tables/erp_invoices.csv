@@ -1,0 +1,4 @@
+erp_invoice_id,order_ref,invoice_type,doc_status,customer_account,customer_name,line_description,qty,unit_price,gl_account,tax_code,invoice_date,payment_due,iso_currency,internal_dept,created_by,approved_by,warehouse_code
+INV-2025-001,PO-9001,ACCREC,DRAFT,aaaaaaaa-1111-cccc-dddd-eeeeeeeeeeee,Acme Supplies Ltd,Consulting services Q1,10,150.00,200,NONE,2025-01-15,2025-02-15,USD,APAC,jsmith,manager1,WH-01
+INV-2025-002,PO-9002,ACCREC,DRAFT,bbbbbbbb-2222-cccc-dddd-eeeeeeeeeeee,Borealis Imports,Annual software licence,1,2500.00,410,NONE,2025-01-20,2025-02-20,EUR,EMEA,bjones,manager2,WH-02
+INV-2025-003,PO-9003,ACCPAY,DRAFT,cccccccc-3333-cccc-dddd-eeeeeeeeeeee,Crestwood Partners,Office supplies delivery,3,45.50,430,NONE,2025-01-25,2025-02-25,GBP,EMEA,cwilliams,manager2,WH-02

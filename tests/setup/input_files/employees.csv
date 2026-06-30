@@ -1,0 +1,5 @@
+EmployeeID,FirstName,LastName,Status,ExternalLink_Url,ExternalLink_Description
+,Alice,Smith,ACTIVE,https://hr.example.com/employees/alice-smith,HR profile
+,Bob,Jones,ACTIVE,https://hr.example.com/employees/bob-jones,HR profile
+,Carol,Williams,ACTIVE,,
+,David,Brown,ARCHIVED,,

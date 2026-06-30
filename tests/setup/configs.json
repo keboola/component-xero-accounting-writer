@@ -1,0 +1,1254 @@
+[
+  {
+    "name": "test_contacts_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Contacts",
+            "write_mode": "create",
+            "source_table": "contacts.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.contacts",
+              "destination": "contacts.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_contacts_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Contacts",
+            "write_mode": "upsert",
+            "source_table": "contacts.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.contacts",
+              "destination": "contacts.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_invoices_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Invoices",
+            "write_mode": "create",
+            "source_table": "invoices.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.invoices",
+              "destination": "invoices.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_invoices_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Invoices",
+            "write_mode": "upsert",
+            "source_table": "invoices.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.invoices",
+              "destination": "invoices.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_payments_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Payments",
+            "write_mode": "create",
+            "source_table": "payments.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.payments",
+              "destination": "payments.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_payments_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Payments",
+            "write_mode": "upsert",
+            "source_table": "payments.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.payments",
+              "destination": "payments.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_purchase_orders_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "PurchaseOrders",
+            "write_mode": "create",
+            "source_table": "purchase_orders.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.purchase_orders",
+              "destination": "purchase_orders.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_purchase_orders_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "PurchaseOrders",
+            "write_mode": "upsert",
+            "source_table": "purchase_orders.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.purchase_orders",
+              "destination": "purchase_orders.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_manual_journals_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "ManualJournals",
+            "write_mode": "create",
+            "source_table": "manual_journals.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.manual_journals",
+              "destination": "manual_journals.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_manual_journals_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "ManualJournals",
+            "write_mode": "upsert",
+            "source_table": "manual_journals.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.manual_journals",
+              "destination": "manual_journals.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_items_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Items",
+            "write_mode": "create",
+            "source_table": "items.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.items",
+              "destination": "items.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_items_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Items",
+            "write_mode": "upsert",
+            "source_table": "items.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.items",
+              "destination": "items.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_credit_notes_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "CreditNotes",
+            "write_mode": "create",
+            "source_table": "credit_notes.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.credit_notes",
+              "destination": "credit_notes.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_credit_notes_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "CreditNotes",
+            "write_mode": "upsert",
+            "source_table": "credit_notes.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.credit_notes",
+              "destination": "credit_notes.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_currencies_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Currencies",
+            "write_mode": "create",
+            "source_table": "currencies.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.currencies",
+              "destination": "currencies.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_employees_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Employees",
+            "write_mode": "create",
+            "source_table": "employees.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.employees",
+              "destination": "employees.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_employees_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Employees",
+            "write_mode": "upsert",
+            "source_table": "employees.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.employees",
+              "destination": "employees.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_quotes_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Quotes",
+            "write_mode": "create",
+            "source_table": "quotes.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.quotes",
+              "destination": "quotes.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_quotes_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Quotes",
+            "write_mode": "upsert",
+            "source_table": "quotes.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.quotes",
+              "destination": "quotes.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_tracking_categories_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "TrackingCategories",
+            "write_mode": "create",
+            "source_table": "tracking_categories.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.tracking_categories",
+              "destination": "tracking_categories.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_tracking_categories_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "TrackingCategories",
+            "write_mode": "upsert",
+            "source_table": "tracking_categories_upsert.csv"
+          }
+        ]
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.tracking_categories_upsert",
+              "destination": "tracking_categories_upsert.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_bank_transactions_create",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "BankTransactions",
+            "write_mode": "create",
+            "source_table": "bank_transactions.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.bank_transactions",
+              "destination": "bank_transactions.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_bank_transactions_upsert",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "BankTransactions",
+            "write_mode": "upsert",
+            "source_table": "bank_transactions.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.bank_transactions",
+              "destination": "bank_transactions.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_contacts_column_mapping",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Contacts",
+            "write_mode": "create",
+            "source_table": "crm_export.csv",
+            "column_mapping": [
+              {
+                "source": "full_company_name",
+                "destination": "Name"
+              },
+              {
+                "source": "primary_contact_first",
+                "destination": "FirstName"
+              },
+              {
+                "source": "primary_contact_last",
+                "destination": "LastName"
+              },
+              {
+                "source": "business_email",
+                "destination": "EmailAddress"
+              },
+              {
+                "source": "vat_number",
+                "destination": "TaxNumber"
+              },
+              {
+                "source": "account_ref",
+                "destination": "AccountNumber"
+              },
+              {
+                "source": "is_vendor",
+                "destination": "IsSupplier"
+              },
+              {
+                "source": "is_client",
+                "destination": "IsCustomer"
+              },
+              {
+                "source": "currency",
+                "destination": "DefaultCurrency"
+              }
+            ]
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.crm_export",
+              "destination": "crm_export.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_invoices_column_mapping",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Invoices",
+            "write_mode": "create",
+            "source_table": "erp_invoices.csv",
+            "column_mapping": [
+              {
+                "source": "erp_invoice_id",
+                "destination": "InvoiceNumber"
+              },
+              {
+                "source": "order_ref",
+                "destination": "Reference"
+              },
+              {
+                "source": "invoice_type",
+                "destination": "Type"
+              },
+              {
+                "source": "doc_status",
+                "destination": "Status"
+              },
+              {
+                "source": "customer_account",
+                "destination": "Contact_ContactID"
+              },
+              {
+                "source": "customer_name",
+                "destination": "Contact_Name"
+              },
+              {
+                "source": "line_description",
+                "destination": "LineItem_Description"
+              },
+              {
+                "source": "qty",
+                "destination": "LineItem_Quantity"
+              },
+              {
+                "source": "unit_price",
+                "destination": "LineItem_UnitAmount"
+              },
+              {
+                "source": "gl_account",
+                "destination": "LineItem_AccountCode"
+              },
+              {
+                "source": "tax_code",
+                "destination": "LineItem_TaxType"
+              },
+              {
+                "source": "invoice_date",
+                "destination": "DateString"
+              },
+              {
+                "source": "payment_due",
+                "destination": "DueDateString"
+              },
+              {
+                "source": "iso_currency",
+                "destination": "CurrencyCode"
+              }
+            ]
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.erp_invoices",
+              "destination": "erp_invoices.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_contacts_sparse",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Contacts",
+            "write_mode": "create",
+            "source_table": "contacts_sparse.csv"
+          }
+        ],
+        "skip_validation_errors": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.contacts_sparse",
+              "destination": "contacts_sparse.csv"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "test_invoices_missing_contact",
+    "config": {
+      "parameters": {
+        "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+        "entities": [
+          {
+            "entity_type": "Invoices",
+            "write_mode": "create",
+            "source_table": "invoices_no_contact.csv"
+          }
+        ],
+        "skip_validation_errors": true,
+        "create_errors_table": true
+      },
+      "image_parameters": {},
+      "authorization": {
+        "oauth_api": {
+          "credentials": {
+            "id": "main",
+            "authorizedFor": "test",
+            "creator": {
+              "id": "0",
+              "description": "test"
+            },
+            "created": "2024-01-01 00:00:00",
+            "appKey": "DUMMY_CLIENT_ID",
+            "#appSecret": "DUMMY_CLIENT_SECRET",
+            "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+          }
+        }
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-vcr.invoices_no_contact",
+              "destination": "invoices_no_contact.csv"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

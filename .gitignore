@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+/data
+*.egg-info/
+src/*.egg-info/
+dist/
+build/
+.env
+.claude
+.vscode
+
+# VCR secrets - never commit real credentials
+secrets.json
+
+# Test runtime dirs (regenerated during replay)
+tests/functional/*/source/data/out
+tests/functional/*/source/data/in/state.json

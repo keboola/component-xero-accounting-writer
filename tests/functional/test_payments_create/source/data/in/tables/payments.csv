@@ -1,0 +1,6 @@
+PaymentID,Date,Amount,Reference,IsReconciled,Status,PaymentType,Invoice_InvoiceID,Invoice_InvoiceNumber,Account_AccountID,Account_Code
+ffffffff-1111-2222-3333-aaaaaaaaaaaa,2025-02-01,1500.00,PAY-001,false,AUTHORISED,,11111111-aaaa-bbbb-cccc-dddddddddddd,INV-2025-001,,090
+ffffffff-2222-2222-3333-aaaaaaaaaaaa,2025-02-03,2500.00,PAY-002,false,AUTHORISED,,22222222-aaaa-bbbb-cccc-dddddddddddd,INV-2025-002,,090
+ffffffff-3333-2222-3333-aaaaaaaaaaaa,2025-02-05,136.50,PAY-003,true,AUTHORISED,,33333333-aaaa-bbbb-cccc-dddddddddddd,INV-2025-003,,090
+ffffffff-4444-2222-3333-aaaaaaaaaaaa,2025-02-10,3500.00,PAY-004,false,AUTHORISED,,44444444-aaaa-bbbb-cccc-dddddddddddd,INV-2025-004,,090
+ffffffff-5555-2222-3333-aaaaaaaaaaaa,2025-02-12,2245.00,PAY-005,false,AUTHORISED,,55555555-aaaa-bbbb-cccc-dddddddddddd,INV-2025-005,,090

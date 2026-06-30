@@ -1,0 +1,39 @@
+{
+  "parameters": {
+    "tenant_id": "5e9dcb82-c1f2-4992-b99c-88ce31d71953",
+    "entities": [
+      {
+        "entity_type": "TrackingCategories",
+        "write_mode": "create",
+        "source_table": "tracking_categories.csv"
+      }
+    ]
+  },
+  "image_parameters": {},
+  "authorization": {
+    "oauth_api": {
+      "credentials": {
+        "id": "main",
+        "authorizedFor": "test",
+        "creator": {
+          "id": "0",
+          "description": "test"
+        },
+        "created": "2024-01-01 00:00:00",
+        "appKey": "DUMMY_CLIENT_ID",
+        "#appSecret": "DUMMY_CLIENT_SECRET",
+        "#data": "{\"access_token\": \"DUMMY_ACCESS_TOKEN\", \"refresh_token\": \"DUMMY_REFRESH_TOKEN\", \"token_type\": \"Bearer\", \"expires_in\": 1800, \"scope\": [\"offline_access\", \"accounting.transactions\", \"accounting.contacts\", \"accounting.settings\", \"accounting.journals.read\", \"accounting.attachments\"]}"
+      }
+    }
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-vcr.tracking_categories",
+          "destination": "tracking_categories.csv"
+        }
+      ]
+    }
+  }
+}

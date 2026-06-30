@@ -1,0 +1,3 @@
+entity_type,record_id,errors
+Invoices,INV-NC-001,{'message': 'Organisation is not subscribed to currency USD'}; {'message': 'A Contact must be specified for this type of transaction'}
+Invoices,INV-NC-002,{'message': 'Organisation is not subscribed to currency GBP'}; {'message': 'A Contact must be specified for this type of transaction'}
